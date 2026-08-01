@@ -9,6 +9,8 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Fallback for when Vite dev server isn't running: use compiled CSS from public/css/app.css -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-900">
 
