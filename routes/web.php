@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Pusat\ProductController;
 use App\Http\Controllers\Pusat\RequestController as PusatRequestController;
+use App\Http\Controllers\Pusat\StockPredictionController;
 use App\Http\Controllers\Distributor\RequestController as DistributorRequestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Pusat\DashboardController as PusatDashboardController;
@@ -37,7 +38,6 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'role:pusat'])->prefix('pusat')->name('pusat.')->group(function () {
 
     // Dashboard pusat otomatis dialihkan ke halaman produk
-    // Ubah rute dashboard ini
     Route::get('/dashboard', [PusatDashboardController::class, 'index'])->name('dashboard');
 
     // Rute CRUD Master Barang
@@ -52,9 +52,12 @@ Route::middleware(['auth', 'role:pusat'])->prefix('pusat')->name('pusat.')->grou
     // Rute Laporan Kartu Stok / Mutasi
     Route::get('mutasi', [\App\Http\Controllers\Pusat\MutationController::class, 'index'])->name('mutasi.index');
 
-    // TAMBAHKAN BARIS INI (Rute khusus untuk Update Status)
+    // Rute khusus untuk Update Status
     Route::put('request/{id}/update-status', [PusatRequestController::class, 'updateStatus'])->name('request.updateStatus');
 
+    // Rute Prediksi Stok AI
+    Route::get('prediksi-stok', [StockPredictionController::class, 'index'])->name('prediksi.index');
+    Route::post('prediksi-stok', [StockPredictionController::class, 'predict'])->name('prediksi.predict');
 
 });
 
