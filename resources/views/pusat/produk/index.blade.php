@@ -39,7 +39,7 @@
                 <h5 class="text-lg font-bold text-slate-800">Tabel Inventaris Utama</h5>
                 <p class="text-sm text-slate-500">Kelola master data produk spesifik, harga kemasan, dan pantau ketersediaan stok fisik.</p>
             </div>
-            <a href="{{ route('pusat.produk.create') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors shadow-sm">
+            <a href="{{ route('produk.create') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors shadow-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 Tambah Produk
             </a>
@@ -94,11 +94,11 @@
 
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-4">
-                                    <a href="{{ route('pusat.produk.edit', $item->id) }}" class="text-slate-400 hover:text-blue-600 transition-colors transform hover:scale-110" title="Edit Data">
+                                    <a href="{{ route('produk.edit', $item->id) }}" class="text-slate-400 hover:text-blue-600 transition-colors transform hover:scale-110" title="Edit Data">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                     </a>
 
-                                    <form id="delete-form-{{ $item->id }}" action="{{ route('pusat.produk.destroy', $item->id) }}" method="POST" class="m-0 p-0 flex items-center">
+                                    <form id="delete-form-{{ $item->id }}" action="{{ route('produk.destroy', $item->id) }}" method="POST" class="m-0 p-0 flex items-center">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" onclick="confirmDelete({{ $item->id }})" class="text-slate-400 hover:text-red-500 transition-colors transform hover:scale-110 bg-transparent border-0 cursor-pointer p-0" title="Hapus Data">

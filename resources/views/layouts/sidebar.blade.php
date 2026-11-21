@@ -1,3 +1,52 @@
+@php
+    $viewAll = auth()->user()->can('request.view-all');
+
+    $statuses = [
+        [
+            'key' => 'pending',
+            'icon' => 'fa-clock',
+            'label' => $viewAll ? 'Pesanan Baru' : 'Menunggu Pusat',
+            'bg' => 'bg-orange-50',
+            'iconActive' => 'bg-orange-500 text-white shadow-md shadow-orange-500/20',
+            'iconHover' => 'group-hover:bg-orange-100 group-hover:text-orange-600',
+            'textActive' => 'text-orange-700',
+            'textHover' => 'group-hover:text-orange-600',
+        ],
+        [
+            'key' => 'diproses',
+            'icon' => 'fa-box-open',
+            'label' => $viewAll ? 'Siap Kirim' : 'Sedang Diproses',
+            'bg' => 'bg-blue-50',
+            'iconActive' => 'bg-blue-600 text-white shadow-md shadow-blue-500/20',
+            'iconHover' => 'group-hover:bg-blue-100 group-hover:text-blue-600',
+            'textActive' => 'text-blue-700',
+            'textHover' => 'group-hover:text-blue-700',
+        ],
+        [
+            'key' => 'dikirim',
+            'icon' => 'fa-truck',
+            'label' => $viewAll ? 'Sedang Dikirim' : 'Dalam Perjalanan',
+            'bg' => 'bg-indigo-50',
+            'iconActive' => 'bg-indigo-500 text-white shadow-md shadow-indigo-500/20',
+            'iconHover' => 'group-hover:bg-indigo-100 group-hover:text-indigo-600',
+            'textActive' => 'text-indigo-700',
+            'textHover' => 'group-hover:text-indigo-700',
+        ],
+        [
+            'key' => 'selesai',
+            'icon' => 'fa-check-circle',
+            'label' => $viewAll ? 'Riwayat Selesai' : 'Pesanan Selesai',
+            'bg' => 'bg-emerald-50',
+            'iconActive' => 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20',
+            'iconHover' => 'group-hover:bg-emerald-100 group-hover:text-emerald-600',
+            'textActive' => 'text-emerald-700',
+            'textHover' => 'group-hover:text-emerald-700',
+        ],
+    ];
+
+    $allActive = request()->routeIs('request.index') && !request()->has('status');
+@endphp
+
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-slate-200 sm:translate-x-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]" aria-label="Sidebar">
     <div class="h-full flex flex-col justify-between bg-white">
 
@@ -8,97 +57,32 @@
                     Menu Utama
                 </li>
 
-                @can('request.view-all')
+                {{-- Dashboard --}}
+                @can('dashboard.view')
                     <li>
                         <a href="{{ route('dashboard') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('dashboard') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
                                 <i class="fas fa-chart-pie text-sm"></i>
                             </div>
-                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('dashboard') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Dashboard Pusat</span>
+                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('dashboard') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">{{ $viewAll ? 'Dashboard Pusat' : 'Dashboard' }}</span>
                         </a>
                     </li>
+                @endcan
 
+                {{-- Katalog Barang --}}
+                @can('produk.view')
                     <li>
-                        <a href="{{ route('pusat.produk.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('pusat.produk.*') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('pusat.produk.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
+                        <a href="{{ route('produk.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('produk.*') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
+                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('produk.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
                                 <i class="fas fa-boxes text-sm"></i>
                             </div>
-                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('pusat.produk.*') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Katalog Barang</span>
+                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('produk.*') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Katalog Barang</span>
                         </a>
                     </li>
+                @endcan
 
-                    <li class="px-3 pb-2 pt-4 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
-                        Alur Pesanan
-                    </li>
-
-                    <li>
-                        <a href="{{ route('request.index', ['status' => 'pending']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'pending' ? 'bg-orange-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'pending' ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-orange-100 group-hover:text-orange-600' }}">
-                                <i class="fas fa-clock text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request('status') == 'pending' ? 'text-orange-700' : 'text-slate-600 group-hover:text-orange-600' }}">Pesanan Baru</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('request.index', ['status' => 'diproses']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'diproses' ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'diproses' ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
-                                <i class="fas fa-box-open text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request('status') == 'diproses' ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Siap Kirim</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('request.index', ['status' => 'dikirim']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'dikirim' ? 'bg-indigo-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'dikirim' ? 'bg-indigo-500 text-white shadow-md shadow-indigo-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-indigo-100 group-hover:text-indigo-600' }}">
-                                <i class="fas fa-truck text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request('status') == 'dikirim' ? 'text-indigo-700' : 'text-slate-600 group-hover:text-indigo-700' }}">Sedang Dikirim</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('request.index', ['status' => 'selesai']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'selesai' ? 'bg-emerald-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'selesai' ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-emerald-100 group-hover:text-emerald-600' }}">
-                                <i class="fas fa-check-circle text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request('status') == 'selesai' ? 'text-emerald-700' : 'text-slate-600 group-hover:text-emerald-700' }}">Riwayat Selesai</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('request.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('request.index') && !request()->has('status') ? 'bg-slate-100' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('request.index') && !request()->has('status') ? 'bg-slate-600 text-white shadow-md shadow-slate-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700' }}">
-                                <i class="fas fa-list-ul text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('request.index') && !request()->has('status') ? 'text-slate-800' : 'text-slate-600 group-hover:text-slate-800' }}">Semua Transaksi</span>
-                        </a>
-                    </li>
-
-                    <li class="px-3 pb-2 pt-4 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
-                        Pelaporan
-                    </li>
-
-                    <li>
-                        <a href="{{ route('pusat.mutasi.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('pusat.mutasi.*') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('pusat.mutasi.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
-                                <i class="fas fa-exchange-alt text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('pusat.mutasi.*') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Riwayat Mutasi</span>
-                        </a>
-                    </li>
-
-                @else
-                    <li>
-                        <a href="{{ route('dashboard') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('dashboard') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
-                                <i class="fas fa-chart-pie text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('dashboard') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Dashboard</span>
-                        </a>
-                    </li>
-
+                {{-- Buat Pesanan Baru --}}
+                @can('request.create')
                     <li>
                         <a href="{{ route('request.create') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('request.create') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('request.create') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
@@ -107,56 +91,65 @@
                             <span class="ms-3 font-semibold text-sm {{ request()->routeIs('request.create') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Buat Pesanan Baru</span>
                         </a>
                     </li>
+                @endcan
 
+                {{-- Alur / Pantau Pesanan --}}
+                @can('request.view')
                     <li class="px-3 pb-2 pt-4 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
-                        Pantau Pesanan
+                        {{ $viewAll ? 'Alur Pesanan' : 'Pantau Pesanan' }}
                     </li>
 
-                    <li>
-                        <a href="{{ route('request.index', ['status' => 'pending']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'pending' ? 'bg-orange-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'pending' ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-orange-100 group-hover:text-orange-600' }}">
-                                <i class="fas fa-clock text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request('status') == 'pending' ? 'text-orange-700' : 'text-slate-600 group-hover:text-orange-600' }}">Menunggu Pusat</span>
-                        </a>
-                    </li>
+                    @foreach ($statuses as $s)
+                        @php $active = request('status') == $s['key']; @endphp
+                        <li>
+                            <a href="{{ route('request.index', ['status' => $s['key']]) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ $active ? $s['bg'] : 'hover:bg-slate-50' }}">
+                                <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ $active ? $s['iconActive'] : 'bg-slate-100 text-slate-500 ' . $s['iconHover'] }}">
+                                    <i class="fas {{ $s['icon'] }} text-sm"></i>
+                                </div>
+                                <span class="ms-3 font-semibold text-sm {{ $active ? $s['textActive'] : 'text-slate-600 ' . $s['textHover'] }}">{{ $s['label'] }}</span>
+                            </a>
+                        </li>
+                    @endforeach
 
                     <li>
-                        <a href="{{ route('request.index', ['status' => 'diproses']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'diproses' ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'diproses' ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
-                                <i class="fas fa-box-open text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request('status') == 'diproses' ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Sedang Diproses</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('request.index', ['status' => 'dikirim']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'dikirim' ? 'bg-indigo-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'dikirim' ? 'bg-indigo-500 text-white shadow-md shadow-indigo-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-indigo-100 group-hover:text-indigo-600' }}">
-                                <i class="fas fa-truck text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request('status') == 'dikirim' ? 'text-indigo-700' : 'text-slate-600 group-hover:text-indigo-700' }}">Dalam Perjalanan</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('request.index', ['status' => 'selesai']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'selesai' ? 'bg-emerald-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'selesai' ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-emerald-100 group-hover:text-emerald-600' }}">
-                                <i class="fas fa-check-circle text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request('status') == 'selesai' ? 'text-emerald-700' : 'text-slate-600 group-hover:text-emerald-700' }}">Pesanan Selesai</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('request.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('request.index') && !request()->has('status') ? 'bg-slate-100' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('request.index') && !request()->has('status') ? 'bg-slate-600 text-white shadow-md shadow-slate-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700' }}">
+                        <a href="{{ route('request.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ $allActive ? 'bg-slate-100' : 'hover:bg-slate-50' }}">
+                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ $allActive ? 'bg-slate-600 text-white shadow-md shadow-slate-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700' }}">
                                 <i class="fas fa-list-ul text-sm"></i>
                             </div>
-                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('request.index') && !request()->has('status') ? 'text-slate-800' : 'text-slate-600 group-hover:text-slate-800' }}">Semua Pesanan</span>
+                            <span class="ms-3 font-semibold text-sm {{ $allActive ? 'text-slate-800' : 'text-slate-600 group-hover:text-slate-800' }}">{{ $viewAll ? 'Semua Transaksi' : 'Semua Pesanan' }}</span>
                         </a>
                     </li>
                 @endcan
+
+                {{-- Pelaporan --}}
+                @can('mutasi.view')
+                    <li class="px-3 pb-2 pt-4 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
+                        Pelaporan
+                    </li>
+
+                    <li>
+                        <a href="{{ route('mutasi.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('mutasi.*') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
+                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('mutasi.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
+                                <i class="fas fa-exchange-alt text-sm"></i>
+                            </div>
+                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('mutasi.*') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Riwayat Mutasi</span>
+                        </a>
+                    </li>
+                @endcan
+
+                {{-- Akun (semua user yang login) --}}
+                <li class="px-3 pb-2 pt-4 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
+                    Akun
+                </li>
+
+                <li>
+                    <a href="{{ route('profile.edit') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('profile.*') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
+                        <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('profile.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
+                            <i class="fas fa-user-cog text-sm"></i>
+                        </div>
+                        <span class="ms-3 font-semibold text-sm {{ request()->routeIs('profile.*') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Profil Saya</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

@@ -11,14 +11,14 @@
                     <h5 class="text-lg font-bold text-slate-800">Perbarui Informasi</h5>
                     <p class="text-sm text-slate-500">Ubah spesifikasi, harga, maupun file lampiran foto untuk produk <span class="font-bold text-blue-600">{{ $produk->nama_barang }}</span>.</p>
                 </div>
-                <a href="{{ route('pusat.produk.index') }}" class="text-sm font-semibold text-slate-500 hover:text-blue-600 transition-colors flex items-center gap-1">
+                <a href="{{ route('produk.index') }}" class="text-sm font-semibold text-slate-500 hover:text-blue-600 transition-colors flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Kembali
                 </a>
             </div>
 
             <div class="p-6">
-                <form method="POST" action="{{ route('pusat.produk.update', $produk->id) }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('produk.update', $produk->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
