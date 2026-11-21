@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Pusat;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Product; // Menggunakan Product sesuai nama model kamu
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +13,6 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // Mengambil semua data dari tabel products melalui model Product
         $produk = Product::all();
         return view('pusat.produk.index', compact('produk'));
     }
@@ -32,7 +30,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validasi inputan form dari user
         $validated = $request->validate([
             'nama_barang' => 'required|string|max:255',
             'ukuran'      => 'required|string|max:100',
@@ -42,7 +39,6 @@ class ProductController extends Controller
             'gambar'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Maksimal 2MB
         ]);
 
-        // 2. Proses upload gambar jika ada file yang diunggah
         if ($request->hasFile('gambar')) {
             // Menyimpan file di folder: storage/app/public/produk
             $path = $request->file('gambar')->store('produk', 'public');
@@ -52,10 +48,9 @@ class ProductController extends Controller
         // Set default stok distributor untuk produk baru sebesar 0
         $validated['stok_distributor'] = 0;
 
-        // 3. Simpan data ke database melalui Model Product
         Product::create($validated);
 
-        return redirect()->route('pusat.produk.index')
+        return redirect()->route('produk.index')
             ->with('success', 'Katalog produk baru berhasil ditambahkan ke sistem!');
     }
 
@@ -75,7 +70,6 @@ class ProductController extends Controller
     {
         $produk = Product::findOrFail($id);
 
-        // 1. Validasi data pembaruan
         $validated = $request->validate([
             'nama_barang' => 'required|string|max:255',
             'ukuran'      => 'required|string|max:100',
@@ -85,22 +79,19 @@ class ProductController extends Controller
             'gambar'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // 2. Jika ada file gambar baru yang diunggah
         if ($request->hasFile('gambar')) {
-            // Hapus gambar lama dari folder storage jika sebelumnya sudah ada gambar
+            // Hapus gambar lama jika sebelumnya sudah ada
             if ($produk->gambar && Storage::disk('public')->exists($produk->gambar)) {
                 Storage::disk('public')->delete($produk->gambar);
             }
 
-            // Simpan gambar baru ke folder storage
             $path = $request->file('gambar')->store('produk', 'public');
             $validated['gambar'] = $path;
         }
 
-        // 3. Jalankan perintah update data di database
         $produk->update($validated);
 
-        return redirect()->route('pusat.produk.index')
+        return redirect()->route('produk.index')
             ->with('success', 'Informasi varian produk berhasil diperbarui!');
     }
 
@@ -111,15 +102,13 @@ class ProductController extends Controller
     {
         $produk = Product::findOrFail($id);
 
-        // Hapus file gambar dari folder storage agar memori server tidak penuh
         if ($produk->gambar && Storage::disk('public')->exists($produk->gambar)) {
             Storage::disk('public')->delete($produk->gambar);
         }
 
-        // Hapus baris data dari database
         $produk->delete();
 
-        return redirect()->route('pusat.produk.index')
+        return redirect()->route('produk.index')
             ->with('success', 'Produk berhasil dihapus dari katalog master.');
     }
 }

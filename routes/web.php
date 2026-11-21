@@ -1,17 +1,24 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MutationController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestController;
-use App\Http\Controllers\Pusat\ProductController;
 use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
 // Halaman awal / Landing Page
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Dashboard tunggal
+// Dashboard tunggal (isi menyesuaikan permission di controller)
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'permission:dashboard.view'])
     ->name('dashboard');
@@ -31,16 +38,16 @@ Route::middleware('auth')
         Route::put('/{id}/terima', 'terima')->middleware('permission:request.terima')->name('terima');
     });
 
-// Sisa ruang kerja PUSAT (sementara, dibongkar di commit berikutnya)
-Route::middleware(['auth', 'role:pusat|super-admin'])->prefix('pusat')->name('pusat.')->group(function () {
+// Katalog produk & riwayat mutasi
+Route::middleware('auth')->group(function () {
+    Route::get('/produk', [ProductController::class, 'index'])->middleware('permission:produk.view')->name('produk.index');
+    Route::get('/produk/create', [ProductController::class, 'create'])->middleware('permission:produk.create')->name('produk.create');
+    Route::post('/produk', [ProductController::class, 'store'])->middleware('permission:produk.create')->name('produk.store');
+    Route::get('/produk/{produk}/edit', [ProductController::class, 'edit'])->middleware('permission:produk.update')->name('produk.edit');
+    Route::put('/produk/{produk}', [ProductController::class, 'update'])->middleware('permission:produk.update')->name('produk.update');
+    Route::delete('/produk/{produk}', [ProductController::class, 'destroy'])->middleware('permission:produk.delete')->name('produk.destroy');
 
-    Route::resource('produk', ProductController::class);
-
-    Route::get('mutasi', [\App\Http\Controllers\Pusat\MutationController::class, 'index'])->name('mutasi.index');
-
-    // Rute Prediksi Stok AI
-    // Route::get('prediksi-stok', [StockPredictionController::class, 'index'])->name('prediksi.index');
-    // Route::post('prediksi-stok', [StockPredictionController::class, 'predict'])->name('prediksi.predict');
+    Route::get('/mutasi', [MutationController::class, 'index'])->middleware('permission:mutasi.view')->name('mutasi.index');
 });
 
 // Rute Profil bawaan Laravel Breeze
@@ -50,4 +57,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Rute otentikasi (Login, Logout, dll) bawaan Breeze
 require __DIR__.'/auth.php';
