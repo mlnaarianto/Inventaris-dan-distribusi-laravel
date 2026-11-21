@@ -10,31 +10,37 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Yang punya akses kelola produk = sisi pusat (super-admin otomatis lolos Gate::before)
-        if (auth()->user()->can('produk.view')) {
-            return $this->pusat();
-        }
+        $user = auth()->user();
+        $viewAll = $user->can('request.view-all');
 
-        return $this->distributor();
-    }
+        // Pusat melihat semua order, selain itu hanya order miliknya sendiri
+        $scope = fn ($query) => $viewAll ? $query : $query->where('user_id', $user->id);
 
-    private function pusat()
-    {
-        $totalProduk = Product::count();
-        $totalStok = Product::sum('stok_pusat');
-        $requestPending = ProductRequest::where('status', 'pending')->count();
-        $mutasiKeluar = StockMutation::where('jenis_mutasi', 'keluar')->count();
+        $perStatus = $scope(ProductRequest::query())
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
 
-        return view('pusat.dashboard', compact('totalProduk', 'totalStok', 'requestPending', 'mutasiKeluar'));
-    }
+        $stat = [
+            'total'    => (int) $perStatus->sum(),
+            'pending'  => (int) ($perStatus['pending'] ?? 0),
+            'diproses' => (int) ($perStatus['diproses'] ?? 0),
+            'dikirim'  => (int) ($perStatus['dikirim'] ?? 0),
+            'selesai'  => (int) ($perStatus['selesai'] ?? 0),
+        ];
 
-    private function distributor()
-    {
-        $totalStok = Product::sum('stok_distributor');
-        $requestPending = ProductRequest::where('status', 'pending')->count();
-        $requestDikirim = ProductRequest::where('status', 'dikirim')->count();
-        $requestSelesai = ProductRequest::where('status', 'selesai')->count();
+        $recentRequests = $scope(ProductRequest::with(['user', 'details']))
+            ->latest()
+            ->take(5)
+            ->get();
 
-        return view('distributor.dashboard', compact('totalStok', 'requestPending', 'requestDikirim', 'requestSelesai'));
+        // Statistik gudang hanya untuk yang bisa melihat semua order
+        $gudang = $viewAll ? [
+            'totalProduk'  => Product::count(),
+            'totalStok'    => (int) Product::sum('stok_pusat'),
+            'mutasiKeluar' => StockMutation::where('jenis_mutasi', 'keluar')->count(),
+        ] : null;
+
+        return view('dashboard', compact('viewAll', 'stat', 'recentRequests', 'gudang'));
     }
 }
