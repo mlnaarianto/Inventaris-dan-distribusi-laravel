@@ -23,9 +23,11 @@ class RolePermissionSeeder extends Seeder
             'produk.delete',
 
             'request.view',
+            'request.view-all',      // baru: lihat request semua distributor
             'request.create',
             'request.update-status',
             'request.cetak',
+            'request.terima',        // baru: konfirmasi barang diterima
 
             'mutasi.view',
         ];
@@ -37,14 +39,17 @@ class RolePermissionSeeder extends Seeder
         // Super admin: tanpa permission, aksesnya diberikan lewat Gate::before
         Role::findOrCreate('super-admin', 'web');
 
-        // Pusat: semua permission
-        Role::findOrCreate('pusat', 'web')->syncPermissions($permissions);
+        // Pusat: semua, kecuali yang khusus distributor
+        Role::findOrCreate('pusat', 'web')->syncPermissions(
+            array_diff($permissions, ['request.create', 'request.terima'])
+        );
 
         // Distributor: terbatas
         Role::findOrCreate('distributor', 'web')->syncPermissions([
             'dashboard.view',
             'request.view',
             'request.create',
+            'request.terima',
         ]);
     }
 }
