@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         // Memanggil semua seeder secara berurutan
         $this->call([
+            RolePermissionSeeder::class,
             UserSeeder::class,    // Membuat akun Pusat & Distributor
             ProductSeeder::class, // Mengisi katalog barang Pocari
             StockMutationSeeder::class, // Mengisi data mutasi/permintaan barang
