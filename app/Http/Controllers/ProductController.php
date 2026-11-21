@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function index()
     {
         $produk = Product::all();
-        return view('pusat.produk.index', compact('produk'));
+        return view('produk.index', compact('produk'));
     }
 
     /**
@@ -22,7 +22,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('pusat.produk.create');
+        return view('produk.create');
     }
 
     /**
@@ -60,7 +60,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $produk = Product::findOrFail($id);
-        return view('pusat.produk.edit', compact('produk'));
+        return view('produk.edit', compact('produk'));
     }
 
     /**

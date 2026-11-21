@@ -9,6 +9,6 @@ class MutationController extends Controller
     public function index()
     {
         $mutasi = StockMutation::with('product')->orderBy('created_at', 'desc')->get();
-        return view('pusat.mutasi.index', compact('mutasi'));
+        return view('mutasi.index', compact('mutasi'));
     }
 }
