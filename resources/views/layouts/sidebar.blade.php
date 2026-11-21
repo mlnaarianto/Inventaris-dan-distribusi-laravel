@@ -8,7 +8,7 @@
                     Menu Utama
                 </li>
 
-                @if(auth()->user()->role === 'pusat')
+                @can('request.view-all')
                     <li>
                         <a href="{{ route('dashboard') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('dashboard') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
@@ -32,7 +32,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('pusat.request.index', ['status' => 'pending']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'pending' ? 'bg-orange-50' : 'hover:bg-slate-50' }}">
+                        <a href="{{ route('request.index', ['status' => 'pending']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'pending' ? 'bg-orange-50' : 'hover:bg-slate-50' }}">
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'pending' ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-orange-100 group-hover:text-orange-600' }}">
                                 <i class="fas fa-clock text-sm"></i>
                             </div>
@@ -41,7 +41,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('pusat.request.index', ['status' => 'diproses']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'diproses' ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
+                        <a href="{{ route('request.index', ['status' => 'diproses']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'diproses' ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'diproses' ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
                                 <i class="fas fa-box-open text-sm"></i>
                             </div>
@@ -50,7 +50,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('pusat.request.index', ['status' => 'dikirim']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'dikirim' ? 'bg-indigo-50' : 'hover:bg-slate-50' }}">
+                        <a href="{{ route('request.index', ['status' => 'dikirim']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'dikirim' ? 'bg-indigo-50' : 'hover:bg-slate-50' }}">
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'dikirim' ? 'bg-indigo-500 text-white shadow-md shadow-indigo-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-indigo-100 group-hover:text-indigo-600' }}">
                                 <i class="fas fa-truck text-sm"></i>
                             </div>
@@ -59,7 +59,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('pusat.request.index', ['status' => 'selesai']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'selesai' ? 'bg-emerald-50' : 'hover:bg-slate-50' }}">
+                        <a href="{{ route('request.index', ['status' => 'selesai']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'selesai' ? 'bg-emerald-50' : 'hover:bg-slate-50' }}">
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'selesai' ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-emerald-100 group-hover:text-emerald-600' }}">
                                 <i class="fas fa-check-circle text-sm"></i>
                             </div>
@@ -68,11 +68,11 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('pusat.request.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('pusat.request.index') && !request()->has('status') ? 'bg-slate-100' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('pusat.request.index') && !request()->has('status') ? 'bg-slate-600 text-white shadow-md shadow-slate-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700' }}">
+                        <a href="{{ route('request.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('request.index') && !request()->has('status') ? 'bg-slate-100' : 'hover:bg-slate-50' }}">
+                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('request.index') && !request()->has('status') ? 'bg-slate-600 text-white shadow-md shadow-slate-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700' }}">
                                 <i class="fas fa-list-ul text-sm"></i>
                             </div>
-                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('pusat.request.index') && !request()->has('status') ? 'text-slate-800' : 'text-slate-600 group-hover:text-slate-800' }}">Semua Transaksi</span>
+                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('request.index') && !request()->has('status') ? 'text-slate-800' : 'text-slate-600 group-hover:text-slate-800' }}">Semua Transaksi</span>
                         </a>
                     </li>
 
@@ -100,11 +100,11 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('distributor.request.create') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('distributor.request.create') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('distributor.request.create') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
+                        <a href="{{ route('request.create') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('request.create') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
+                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('request.create') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
                                 <i class="fas fa-cart-plus text-sm"></i>
                             </div>
-                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('distributor.request.create') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Buat Pesanan Baru</span>
+                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('request.create') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Buat Pesanan Baru</span>
                         </a>
                     </li>
 
@@ -113,7 +113,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('distributor.request.index', ['status' => 'pending']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'pending' ? 'bg-orange-50' : 'hover:bg-slate-50' }}">
+                        <a href="{{ route('request.index', ['status' => 'pending']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'pending' ? 'bg-orange-50' : 'hover:bg-slate-50' }}">
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'pending' ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-orange-100 group-hover:text-orange-600' }}">
                                 <i class="fas fa-clock text-sm"></i>
                             </div>
@@ -122,7 +122,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('distributor.request.index', ['status' => 'diproses']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'diproses' ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
+                        <a href="{{ route('request.index', ['status' => 'diproses']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'diproses' ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'diproses' ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
                                 <i class="fas fa-box-open text-sm"></i>
                             </div>
@@ -131,7 +131,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('distributor.request.index', ['status' => 'dikirim']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'dikirim' ? 'bg-indigo-50' : 'hover:bg-slate-50' }}">
+                        <a href="{{ route('request.index', ['status' => 'dikirim']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'dikirim' ? 'bg-indigo-50' : 'hover:bg-slate-50' }}">
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'dikirim' ? 'bg-indigo-500 text-white shadow-md shadow-indigo-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-indigo-100 group-hover:text-indigo-600' }}">
                                 <i class="fas fa-truck text-sm"></i>
                             </div>
@@ -140,7 +140,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('distributor.request.index', ['status' => 'selesai']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'selesai' ? 'bg-emerald-50' : 'hover:bg-slate-50' }}">
+                        <a href="{{ route('request.index', ['status' => 'selesai']) }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request('status') == 'selesai' ? 'bg-emerald-50' : 'hover:bg-slate-50' }}">
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request('status') == 'selesai' ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-emerald-100 group-hover:text-emerald-600' }}">
                                 <i class="fas fa-check-circle text-sm"></i>
                             </div>
@@ -149,14 +149,14 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('distributor.request.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('distributor.request.index') && !request()->has('status') ? 'bg-slate-100' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('distributor.request.index') && !request()->has('status') ? 'bg-slate-600 text-white shadow-md shadow-slate-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700' }}">
+                        <a href="{{ route('request.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('request.index') && !request()->has('status') ? 'bg-slate-100' : 'hover:bg-slate-50' }}">
+                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('request.index') && !request()->has('status') ? 'bg-slate-600 text-white shadow-md shadow-slate-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700' }}">
                                 <i class="fas fa-list-ul text-sm"></i>
                             </div>
-                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('distributor.request.index') && !request()->has('status') ? 'text-slate-800' : 'text-slate-600 group-hover:text-slate-800' }}">Semua Pesanan</span>
+                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('request.index') && !request()->has('status') ? 'text-slate-800' : 'text-slate-600 group-hover:text-slate-800' }}">Semua Pesanan</span>
                         </a>
                     </li>
-                @endif
+                @endcan
             </ul>
         </div>
 

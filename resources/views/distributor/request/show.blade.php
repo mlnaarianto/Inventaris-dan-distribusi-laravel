@@ -111,7 +111,7 @@
                 </div>
 
                 @if($pengajuan->status == 'dikirim')
-                    <form action="{{ route('distributor.request.update', $pengajuan->id) }}" method="POST" class="w-full mb-4">
+                    <form action="{{ route('request.terima', $pengajuan->id) }}" method="POST" class="w-full mb-4">
                         @csrf
                         @method('PUT')
                         <button type="submit" onclick="return confirm('Apakah Anda yakin barang sudah diterima dengan baik?')" class="block w-full text-center px-4 py-2.5 text-sm font-bold text-white bg-emerald-600 border border-emerald-700 rounded-xl hover:bg-emerald-700 transition-colors shadow-sm">
@@ -125,7 +125,7 @@
 
                 <hr class="border-slate-100">
 
-                <a href="{{ route('distributor.request.index') }}" class="block w-full text-center px-4 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
+                <a href="{{ route('request.index') }}" class="block w-full text-center px-4 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
                     <div class="flex items-center justify-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Kembali ke Daftar

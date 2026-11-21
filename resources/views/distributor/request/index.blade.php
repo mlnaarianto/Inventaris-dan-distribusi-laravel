@@ -54,7 +54,7 @@
                 <p class="text-sm text-slate-500 mt-1">Pantau status terkini dari barang yang Anda ajukan ke Pusat.</p>
             </div>
 
-            <a href="{{ route('distributor.request.create') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors shadow-sm">
+            <a href="{{ route('request.create') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors shadow-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 Ajukan Pesanan Baru
             </a>
@@ -95,7 +95,7 @@
                             </td>
 
                             <td class="px-6 py-4 text-center">
-                                <a href="{{ route('distributor.request.show', $item->id) }}" class="inline-flex items-center justify-center p-2 text-slate-400 hover:text-blue-600 bg-white hover:bg-blue-50 border border-transparent hover:border-blue-100 rounded-xl transition-all transform hover:scale-110" title="Lihat Detail & Terima Barang">
+                                <a href="{{ route('request.show', $item->id) }}" class="inline-flex items-center justify-center p-2 text-slate-400 hover:text-blue-600 bg-white hover:bg-blue-50 border border-transparent hover:border-blue-100 rounded-xl transition-all transform hover:scale-110" title="Lihat Detail & Terima Barang">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 </a>
                             </td>

@@ -20,7 +20,7 @@
 
                     <div class="hidden sm:flex flex-col text-right">
                         <span class="text-sm font-bold text-slate-700 leading-none">{{ Auth::user()->name }}</span>
-                        <span class="text-xs font-semibold text-blue-500 uppercase tracking-wider mt-1">{{ Auth::user()->role }}</span>
+                        <span class="text-xs font-semibold text-blue-500 uppercase tracking-wider mt-1">{{ Str::headline(Auth::user()->getRoleNames()->first() ?? '-') }}</span>
                     </div>
 
                     <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500">

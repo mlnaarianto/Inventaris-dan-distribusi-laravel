@@ -21,7 +21,7 @@
             <a href="{{ route('pusat.produk.index') }}" class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-blue-800 bg-white rounded-xl shadow-md hover:bg-slate-50 hover:shadow-lg transition-all text-center">
                 <i class="fas fa-boxes mr-2"></i> Kelola Master Barang
             </a>
-            <a href="{{ route('pusat.request.index') }}" class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-white bg-white/20 border border-white/30 rounded-xl hover:bg-white/30 transition-all text-center">
+            <a href="{{ route('request.index') }}" class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-white bg-white/20 border border-white/30 rounded-xl hover:bg-white/30 transition-all text-center">
                 <i class="fas fa-clipboard-check mr-2"></i> Validasi Orderan
             </a>
         </div>

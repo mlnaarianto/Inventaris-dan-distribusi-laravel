@@ -37,7 +37,7 @@
                 <p class="text-blue-100/80 text-sm sm:text-base max-w-lg leading-relaxed mb-6">
                     Pantau pengiriman stok Anda hari ini. Kelola inventaris dan ajukan permintaan barang ke gudang pusat dengan lebih cepat dan transparan.
                 </p>
-                <a href="{{ route('distributor.request.create') }}" class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-blue-700 bg-white rounded-xl hover:bg-blue-50 transition-all hover:-translate-y-1 shadow-md">
+                <a href="{{ route('request.create') }}" class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-blue-700 bg-white rounded-xl hover:bg-blue-50 transition-all hover:-translate-y-1 shadow-md">
                     <i class="fas fa-plus mr-2"></i> Buat Pesanan Baru
                 </a>
             </div>
@@ -99,7 +99,7 @@
                     <h5 class="text-lg font-bold text-slate-800">Aktivitas Pesanan Terakhir</h5>
                     <p class="text-sm text-slate-500">Pantau 5 pengajuan barang terakhir Anda.</p>
                 </div>
-                <a href="{{ route('distributor.request.index') }}" class="text-sm font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-xl transition-colors">
+                <a href="{{ route('request.index') }}" class="text-sm font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-xl transition-colors">
                     Lihat Semua
                 </a>
             </div>
@@ -139,7 +139,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <a href="{{ route('distributor.request.show', $req->id) }}" class="inline-flex items-center justify-center p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all">
+                                    <a href="{{ route('request.show', $req->id) }}" class="inline-flex items-center justify-center p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all">
                                         <i class="fas fa-chevron-right"></i>
                                     </a>
                                 </td>
