@@ -1,66 +1,123 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🥤 Pocari System - Inventaris & Distribusi
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem Informasi Manajemen Inventaris dan Distribusi berbasis web yang dirancang khusus untuk kebutuhan **PT. Amerta Indah Otsuka (Pocari Sweat)**. Aplikasi ini menjembatani proses pengelolaan stok di Gudang Pusat dengan proses pengajuan (request) barang oleh mitra Distributor secara *real-time*, transparan, dan terkomputerisasi.
 
-## About Laravel
+> 🎓 Proyek ini dibuat sebagai **Tugas Akhir** dengan tema **Inventaris dan Distribusi**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Role-Based Access Control (RBAC):** Menggunakan `spatie/laravel-permission` dengan 3 peran utama: **Super Admin**, **Pusat (HQ)**, dan **Distributor**.
+- **Dashboard Terpadu:** Satu tampilan dashboard yang cerdas, di mana statistik dan menu akan menyesuaikan secara otomatis berdasarkan peran pengguna yang sedang login.
+- **Manajemen Katalog & Stok:** Pengelolaan produk, kemasan, dan riwayat mutasi stok (barang masuk/keluar) oleh pihak Pusat.
+- **Sistem Pengajuan (Request Order):** Distributor dapat mengajukan pesanan, dan Pusat dapat memvalidasi, memproses, hingga mengubah status pengiriman.
+- **Cetak Surat Jalan (PDF):** Integrasi dengan DomPDF untuk mencetak surat jalan pengiriman secara otomatis lengkap dengan kolom cek terima.
+- **Manajemen Akun & Role:** Super Admin dapat mengelola akun pengguna, mengatur role, dan melakukan *reset password* pengguna lain.
+- **Profil Pengguna:** Fitur unggah, ganti, dan hapus foto profil (dengan *fallback* inisial jika belum ada foto). Username dan role bersifat *read-only*.
+- **Modern UI/UX:** Tampilan menggunakan Tailwind CSS, dilengkapi dengan **Dark Mode**, sidebar responsif, notifikasi *toast* (SweetAlert2), dan animasi yang halus.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Teknologi yang Digunakan
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Backend:** Laravel 11.x (PHP 8.4)
+- **Database:** MySQL 8.0
+- **Frontend:** Tailwind CSS, Alpine.js, Vite, FontAwesome
+- **Autentikasi & Otorisasi:** Laravel Breeze (dimodifikasi) & Spatie Laravel Permission
+- **PDF Generator:** barryvdh/laravel-dompdf
+- **Environment:** Docker & Docker Compose (PHP-FPM, Nginx, Node.js)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🚀 Panduan Instalasi (Menggunakan Docker)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Proyek ini sudah dilengkapi dengan konfigurasi Docker yang siap pakai. Anda tidak perlu menginstall PHP, MySQL, atau Node.js di laptop Anda.
 
-### Premium Partners
+### 1. Persyaratan
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) sudah terinstall dan berjalan.
 
-## Contributing
+### 2. Langkah-langkah
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# 1. Clone repository ini
+git clone https://github.com/mlnaarianto/Inventaris-dan-distribusi-laravel.git
+cd Inventaris-dan-distribusi-laravel
 
-## Code of Conduct
+# 2. Copy file environment
+cp .env.example .env
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 3. Build dan jalankan container Docker
+docker compose up -d --build
 
-## Security Vulnerabilities
+# 4. Install dependensi PHP (Composer)
+docker compose exec app composer install
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 5. Generate Application Key
+docker compose exec app php artisan key:generate
 
-## License
+# 6. Jalankan Migrasi Database beserta Seeder (Data Awal)
+docker compose exec app php artisan migrate:fresh --seed
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# 7. (Opsional) Bersihkan cache
+docker compose exec app php artisan optimize:clear
+```
+
+Aplikasi dapat diakses melalui browser di: **http://localhost:8000**
+
+*(Vite / Frontend server sudah berjalan otomatis di dalam container `project_vite`)*
+
+---
+
+## 🔐 Akun Default (Hasil Seeder)
+
+Setelah menjalankan `migrate:fresh --seed`, Anda dapat login menggunakan akun berikut:
+
+| Role | Username | Password | Keterangan |
+| :--- | :--- | :--- | :--- |
+| **Super Admin** | `superadmin` | `password` | Akses penuh ke seluruh sistem & manajemen user. |
+| **Pusat (HQ)** | `pusat` | `password` | Mengelola stok, validasi order, dan cetak surat jalan. |
+| **Distributor** | `distributor` | `password` | Membuat pesanan dan memantau status pengiriman. |
+
+> ⚠️ **Catatan:** Segera ganti password default ini jika aplikasi digunakan di lingkungan *production*.
+
+---
+
+## 📂 Struktur Proyek (Poin Penting)
+
+Proyek ini telah melalui proses *refactoring* besar-besaran untuk menghilangkan duplikasi kode antara halaman Pusat dan Distributor:
+
+- **Controllers:** Menggunakan `DashboardController`, `RequestController`, `ProductController`, dan `MutationController` yang disatukan. Logika perbedaan role ditangani menggunakan `@can` (Gate/Permission) di level View dan Controller.
+- **Views:** Folder `pusat/` dan `distributor/` telah dihapus. Semua view disatukan di dalam folder `request/`, `produk/`, dan `mutasi/`.
+- **Docker:** Konfigurasi terletak pada `Dockerfile`, `docker-compose.yml`, dan `nginx/default.conf`.
+
+---
+
+## 📝 Catatan Progres & Migrasi
+
+### ✅ Selesai
+
+- [x] Migrasi total dari sistem Role lama ke Spatie Permission.
+- [x] Penambahan kolom `username` dan `foto` pada tabel `users`.
+- [x] Penghapusan fitur Register publik, Forgot Password via email, dan Verify Email (sistem dikelola internal).
+- [x] Unifikasi Dashboard Pusat & Distributor menjadi satu `DashboardController`.
+- [x] Unifikasi modul Request, Produk, dan Mutasi.
+- [x] Fitur Upload Foto Profil (termasuk hapus file lama di storage).
+- [x] Implementasi Dark Mode (Tailwind) & *Anti-flash script*.
+- [x] Desain ulang UI Login dan Landing Page (Modern SaaS style).
+- [x] Integrasi Docker untuk Development Environment.
+
+### 🔧 Yang Perlu Diselesaikan (To-Do)
+
+- [ ] Ubah judul halaman profil dari "Profile" menjadi "Profil Saya".
+- [ ] Pasang paket bahasa (`laravel-lang` / `lang/id/validation.php`) agar pesan error validasi berbahasa Indonesia.
+- [ ] Perbaiki Font Awesome di sidebar jika ikon sempat tidak muncul (CDN check).
+- [ ] Selesaikan bug foto profil di header kanan atas agar merender inisial/foto dengan benar.
+- [ ] Tangani error 500 pada `ProductController@destroy` jika produk sudah terikat dengan order.
+
+---
+
+## 📄 Lisensi
+
+Project ini dibangun di atas framework [Laravel](https://laravel.com), yang berlisensi [MIT license](https://opensource.org/licenses/MIT).

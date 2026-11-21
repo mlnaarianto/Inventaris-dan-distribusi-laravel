@@ -206,33 +206,48 @@
             eyeIcon.classList.toggle('fa-eye-slash');
         });
 
-        // Toast pojok kanan atas
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3500,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        });
+        // === Helper untuk mendapatkan tema SweetAlert2 ===
+        function getSwalTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
+            return {
+                background: isDark ? '#1e293b' : '#ffffff', // dark:bg-slate-800 vs bg-white
+                color: isDark ? '#f1f5f9' : '#0f172a',      // dark:text-slate-100 vs text-slate-900
+            };
+        }
 
+        // === Helper untuk menampilkan Toast ===
+        function showToast(icon, title, timer = 3500) {
+            Swal.fire({
+                ...getSwalTheme(),
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: timer,
+                timerProgressBar: true,
+                icon: icon,
+                title: title,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+        }
+
+        // === Trigger Toast dari Session Laravel ===
         @if (session('success'))
-            Toast.fire({ icon: 'success', title: @json(session('success')) });
+            showToast('success', @json(session('success')));
         @endif
 
         @if (session('error'))
-            Toast.fire({ icon: 'error', title: @json(session('error')), timer: 6000 });
+            showToast('error', @json(session('error')), 6000);
         @endif
 
         @if (session('status'))
-            Toast.fire({ icon: 'success', title: @json(session('status')) });
+            showToast('success', @json(session('status')));
         @endif
 
         @if ($errors->any())
-            Toast.fire({ icon: 'error', title: @json($errors->first()), timer: 6000 });
+            showToast('error', @json($errors->first()), 6000);
         @endif
     </script>
 </body>

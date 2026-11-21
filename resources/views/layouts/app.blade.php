@@ -88,49 +88,69 @@
             });
         })();
 
-        // Toast pojok kanan atas
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3500,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        });
+        // === Helper untuk mendapatkan tema SweetAlert2 ===
+        // Fungsi ini akan mengecek apakah class 'dark' ada di tag <html>
+        function getSwalTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
+            return {
+                background: isDark ? '#1e293b' : '#ffffff', // dark:bg-slate-800 vs bg-white
+                color: isDark ? '#f1f5f9' : '#0f172a',      // dark:text-slate-100 vs text-slate-900
+            };
+        }
 
+        // === Helper untuk menampilkan Toast ===
+        function showToast(icon, title, timer = 3500) {
+            Swal.fire({
+                ...getSwalTheme(),
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: timer,
+                timerProgressBar: true,
+                icon: icon,
+                title: title,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+        }
+
+        // === Trigger Toast dari Session Laravel ===
         @if (session('success'))
-            Toast.fire({ icon: 'success', title: @json(session('success')) });
+            showToast('success', @json(session('success')));
         @endif
 
         @if (session('error'))
-            Toast.fire({ icon: 'error', title: @json(session('error')), timer: 6000 });
+            showToast('error', @json(session('error')), 6000);
         @endif
 
         @if (session('status'))
-            Toast.fire({ icon: 'success', title: @json(session('status')) });
+            showToast('success', @json(session('status')));
         @endif
 
         @if ($errors->any())
-            Toast.fire({ icon: 'error', title: @json($errors->first()), timer: 6000 });
+            showToast('error', @json($errors->first()), 6000);
         @endif
 
-        // Konfirmasi: tambahkan data-confirm="Pesan..." pada <form>
+        // === Konfirmasi Form ===
+        // Tambahkan data-confirm="Pesan..." pada <form>
         document.addEventListener('submit', function (e) {
             const form = e.target;
             const pesan = form.dataset.confirm;
             if (!pesan || form.dataset.confirmed) return;
 
             e.preventDefault();
+            
+            // Panggil SweetAlert dengan tema yang sesuai
             Swal.fire({
+                ...getSwalTheme(),
                 title: 'Yakin?',
                 text: pesan,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#dc2626',
-                cancelButtonColor: '#64748b',
+                confirmButtonColor: '#dc2626', // Warna merah untuk konfirmasi hapus/keluar
+                cancelButtonColor: '#64748b',  // Warna abu-abu untuk batal
                 confirmButtonText: 'Ya, lanjutkan',
                 cancelButtonText: 'Batal',
                 reverseButtons: true
