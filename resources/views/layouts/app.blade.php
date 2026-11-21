@@ -17,33 +17,50 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <!-- Fallback for when Vite dev server isn't running: use compiled CSS from public/css/app.css -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
-    <style>
-        [x-cloak] {
-            display: none !important;
+
+    {{-- Anti-flash: set tema SEBELUM render --}}
+    <script>
+        if (localStorage.theme === 'dark' ||
+            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
         }
+    </script>
+
+    <style>
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 
-<body class="font-sans antialiased bg-gray-50 text-gray-900">
+{{-- State sidebarOpen: true di desktop (>= 1024px), false di mobile --}}
+<body class="font-sans antialiased bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-slate-100 transition-colors duration-300" x-data="{ sidebarOpen: window.innerWidth >= 1024 }">
 
     @include('layouts.header')
 
     @include('layouts.sidebar')
 
-    <div class="p-4 pt-6 sm:ml-64 mt-16 flex flex-col min-h-[calc(100vh-4rem)]">
+    {{-- Wrapper Utama: margin kiri 64 (16rem) HANYA saat sidebar terbuka di DESKTOP --}}
+    <div class="p-4 pt-6 mt-16 flex flex-col min-h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out"
+         :class="sidebarOpen ? 'lg:ml-64' : 'ml-0'">
 
         <main class="flex-grow">
-            @if(isset($header))
-            <div class="mb-6 max-w-7xl">
-                <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-                    <h1 class="text-xl font-semibold text-slate-900">{{ $header }}</h1>
-                </div>
-            </div>
-            @endif
 
-            {{ $slot }}
+            <div class="w-full max-w-7xl mx-auto">
+
+                @if(isset($header))
+                <div class="mb-6">
+                    <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 shadow-sm transition-colors">
+                        <h1 class="text-xl font-semibold text-slate-900 dark:text-white">{{ $header }}</h1>
+                    </div>
+                </div>
+                @endif
+
+                {{ $slot }}
+
+            </div>
+
         </main>
 
         @include('layouts.footer')
@@ -51,6 +68,26 @@
     </div>
 
     <script>
+        // === Dark mode toggle ===
+        (function () {
+            const toggle = document.getElementById('theme-toggle');
+            const icon   = document.getElementById('theme-toggle-icon');
+            if (!toggle || !icon) return;
+
+            const renderIcon = () => {
+                const isDark = document.documentElement.classList.contains('dark');
+                icon.classList.toggle('fa-moon', !isDark);
+                icon.classList.toggle('fa-sun',  isDark);
+            };
+            renderIcon();
+
+            toggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                renderIcon();
+            });
+        })();
+
         // Toast pojok kanan atas
         const Toast = Swal.mixin({
             toast: true,
