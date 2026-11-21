@@ -25,10 +25,6 @@ class RequestController extends Controller
 
         $query = ProductRequest::with(['user', 'details'])->orderBy('created_at', 'desc');
 
-        if (! auth()->user()->can('request.view-all')) {
-            $query->where('user_id', auth()->id());
-        }
-
         if ($status && in_array($status, self::STATUSES)) {
             $query->where('status', $status);
         } else {
@@ -82,8 +78,6 @@ class RequestController extends Controller
     public function show(string $id)
     {
         $pengajuan = ProductRequest::with(['details.product', 'user'])->findOrFail($id);
-
-        $this->authorizeOwnerOrViewAll($pengajuan);
 
         return view('request.show', compact('pengajuan'));
     }
@@ -193,7 +187,9 @@ class RequestController extends Controller
 
         $pdf = Pdf::loadView('request.cetak', compact('pengajuan'));
 
-        return $pdf->stream('Surat-Jalan-' . $pengajuan->kode_request . '.pdf');
+        $nama = 'Surat-Jalan-' . $pengajuan->kode_request . '.pdf';
+
+        return request()->boolean('unduh') ? $pdf->download($nama) : $pdf->stream($nama);
     }
 
     /**

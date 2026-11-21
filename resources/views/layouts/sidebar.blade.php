@@ -137,6 +137,35 @@
                     </li>
                 @endcan
 
+                {{-- Administrasi --}}
+                @canany(['user.view', 'role.view'])
+                    <li class="px-3 pb-2 pt-4 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
+                        Administrasi
+                    </li>
+                @endcanany
+
+                @can('user.view')
+                    <li>
+                        <a href="{{ route('users.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('users.*') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
+                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('users.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
+                                <i class="fas fa-users text-sm"></i>
+                            </div>
+                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('users.*') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Kelola Akun</span>
+                        </a>
+                    </li>
+                @endcan
+
+                @can('role.view')
+                    <li>
+                        <a href="{{ route('roles.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('roles.*') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
+                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('roles.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
+                                <i class="fas fa-user-shield text-sm"></i>
+                            </div>
+                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('roles.*') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Manajemen Role</span>
+                        </a>
+                    </li>
+                @endcan
+
                 {{-- Akun (semua user yang login) --}}
                 <li class="px-3 pb-2 pt-4 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
                     Akun

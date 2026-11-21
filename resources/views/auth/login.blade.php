@@ -9,23 +9,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
-                    colors: {
-                        pocari: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a' }
-                    }
-                }
-            }
-        }
-    </script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased text-slate-800 bg-white selection:bg-pocari-500 selection:text-white">
+<body class="font-poppins antialiased text-slate-800 bg-white selection:bg-pocari-500 selection:text-white">
 
     <div class="flex min-h-screen">
 
@@ -50,7 +38,7 @@
                     Sistem pemantauan stok real-time dan manajemen distribusi resmi untuk mitra PT Amerta Indah Otsuka.
                 </p>
 
-                <div class="mt-12 flex items-center gap-4 text-sm font-semibold text-pocari-200 bg-white/10 w-fit px-5 py-3 rounded-2xl backdrop-blur-sm border border-white/10">
+                <div class="mt-12 flex items-center gap-4 text-sm font-semibold text-pocari-100 bg-white/10 w-fit px-5 py-3 rounded-2xl backdrop-blur-sm border border-white/10">
                     <i class="fas fa-shield-alt text-emerald-400 text-lg"></i>
                     Akses Sistem Terenkripsi (End-to-End)
                 </div>

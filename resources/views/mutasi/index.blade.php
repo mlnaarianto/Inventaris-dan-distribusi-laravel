@@ -32,19 +32,59 @@
         table.dataTable.no-footer { border-bottom: 1px solid #f1f5f9 !important; }
     </style>
 
+    @if ($errors->any())
+        <div class="mb-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-semibold px-4 py-3">
+            {{ $errors->first() }}
+        </div>
+    @endif
+
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
 
-        <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+        {{-- Header kartu + filter laporan --}}
+        <div class="p-6 border-b border-slate-100 bg-slate-50/50 space-y-4">
             <div>
                 <h5 class="text-lg font-bold text-slate-800">Buku Pencatatan Mutasi</h5>
                 <p class="text-sm text-slate-500">Riwayat pergerakan stok (masuk & keluar) di gudang utama pusat.</p>
             </div>
-            <button onclick="window.print()" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                Cetak Laporan
-            </button>
+
+            @can('mutasi.cetak')
+                <form method="GET" action="{{ route('mutasi.cetak') }}" target="_blank"
+                      class="flex flex-wrap items-end gap-3">
+                    <div>
+                        <label for="dari" class="block text-xs font-bold text-slate-500 mb-1">Dari tanggal</label>
+                        <input type="date" id="dari" name="dari"
+                               class="rounded-xl border-slate-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="sampai" class="block text-xs font-bold text-slate-500 mb-1">Sampai tanggal</label>
+                        <input type="date" id="sampai" name="sampai"
+                               class="rounded-xl border-slate-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="jenis" class="block text-xs font-bold text-slate-500 mb-1">Jenis</label>
+                        <select id="jenis" name="jenis"
+                                class="rounded-xl border-slate-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="">Semua</option>
+                            <option value="masuk">Masuk</option>
+                            <option value="keluar">Keluar</option>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button type="submit"
+                                class="px-4 py-2.5 text-sm font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-xl hover:bg-emerald-100 transition-colors shadow-sm">
+                            Lihat / Cetak
+                        </button>
+                        <button type="submit" name="unduh" value="1" formtarget="_self"
+                                class="px-4 py-2.5 text-sm font-bold text-blue-600 bg-blue-50 border border-blue-200 rounded-xl hover:bg-blue-100 transition-colors shadow-sm">
+                            Unduh PDF
+                        </button>
+                    </div>
+                </form>
+            @endcan
         </div>
 
+        {{-- Tabel mutasi --}}
         <div class="p-6 overflow-x-auto">
             <table id="mutasiTable" class="w-full text-sm text-left text-slate-500" width="100%">
                 <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-200">
@@ -58,15 +98,16 @@
                 </thead>
                 <tbody>
                     @foreach ($mutasi as $item)
+                        @php $masuk = strtolower($item->jenis_mutasi) == 'masuk'; @endphp
                         <tr class="bg-white border-b border-slate-100 hover:bg-slate-50 transition-colors">
 
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->created_at)->timestamp }}">
                                 <div class="font-bold text-slate-700">{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</div>
                                 <div class="text-xs text-slate-400 mt-0.5">{{ \Carbon\Carbon::parse($item->created_at)->format('H:i:s') }} WIB</div>
                             </td>
 
                             <td class="px-6 py-4">
-                                @if(strtolower($item->jenis_mutasi) == 'masuk')
+                                @if ($masuk)
                                     <span class="inline-flex items-center px-2.5 py-1 text-xs font-bold text-emerald-700 bg-emerald-100 rounded-md border border-emerald-200">
                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
                                         MASUK
@@ -90,7 +131,7 @@
 
                             <td class="px-6 py-4 text-center">
                                 <span class="font-extrabold text-slate-700 text-base">
-                                    @if(strtolower($item->jenis_mutasi) == 'masuk')
+                                    @if ($masuk)
                                         <span class="text-emerald-500">+</span>
                                     @else
                                         <span class="text-rose-500">-</span>

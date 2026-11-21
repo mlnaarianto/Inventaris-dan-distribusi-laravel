@@ -8,24 +8,38 @@ use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
-     */
     public function rules(): array
     {
-        return [
-            'name'  => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+        $rules = [
+            'name'       => ['required', 'string', 'max:255'],
+            'foto'       => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'hapus_foto' => ['nullable', 'boolean'],
         ];
+
+        if ($this->user()->can('profile.update-email')) {
+            $rules['email'] = [
+                'required', 'string', 'lowercase', 'email', 'max:255',
+                Rule::unique(User::class)->ignore($this->user()->id),
+            ];
+        }
+
+        if ($this->user()->can('profile.update-username')) {
+            $rules['username'] = [
+                'required', 'string', 'lowercase', 'alpha_dash', 'min:3', 'max:50',
+                Rule::unique(User::class)->ignore($this->user()->id),
+            ];
+        }
+
+        return $rules;
     }
 
     public function attributes(): array
     {
         return [
-            'name'  => 'nama',
-            'email' => 'email',
+            'name'     => 'nama',
+            'email'    => 'email',
+            'username' => 'username',
+            'foto'     => 'foto profil',
         ];
     }
 }

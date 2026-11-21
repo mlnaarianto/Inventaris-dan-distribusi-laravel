@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Input, tombol, dan label mewarisi font dari parent (Poppins di login, Figtree di layout utama) */
+input, button, textarea, select, label {
+    font-family: inherit;
+}
+
+/* Placeholder lebih terang dan tidak terlihat tebal */
+input::placeholder,
+textarea::placeholder {
+    color: #94a3b8; /* slate-400 */
+    font-weight: 400;
+    opacity: 1;
+}

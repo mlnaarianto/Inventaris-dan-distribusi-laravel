@@ -6,25 +6,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
-
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-     protected $fillable = [
+    protected $fillable = [
         'name',
         'username',
         'email',
         'password',
+        'foto',
     ];
 
     /**
@@ -45,4 +45,22 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * URL publik foto profil, atau null jika belum ada foto.
+     * Dipakai sebagai $user->foto_url
+     */
+    public function getFotoUrlAttribute(): ?string
+    {
+        return $this->foto ? asset('storage/' . $this->foto) : null;
+    }
+
+    /**
+     * Huruf pertama nama, dipakai sebagai cadangan saat belum ada foto.
+     * Dipakai sebagai $user->inisial
+     */
+    public function getInisialAttribute(): string
+    {
+        return strtoupper(mb_substr($this->name ?? '', 0, 1));
+    }
 }

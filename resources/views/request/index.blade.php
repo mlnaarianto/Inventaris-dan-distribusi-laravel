@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        @can('request.view-all') Permintaan Masuk @else Manajemen Pengajuan Barang @endcan
+        @can('request.view-all') Permintaan Masuk @else Daftar Pengajuan Barang @endcan
     </x-slot>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -27,7 +27,7 @@
         <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
             <div>
                 <h5 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                    @can('request.view-all') Daftar Order dari Distributor @else Riwayat Pesanan @endcan
+                    @can('request.view-all') Daftar Order dari Distributor @else Daftar Pesanan @endcan
                     <span class="px-2.5 py-0.5 rounded-md text-sm font-black uppercase tracking-wider border {{ $status ? ($badgeMap[$status] ?? '') : 'bg-slate-100 text-slate-600 border-slate-200' }}">
                         {{ $status ?: 'Keseluruhan' }}
                     </span>
@@ -36,7 +36,7 @@
                     @can('request.view-all')
                         Validasi pesanan, cek stok, dan proses pengiriman barang.
                     @else
-                        Pantau status terkini dari barang yang Anda ajukan ke Pusat.
+                        Pantau status pengajuan barang ke Pusat. Order milik Anda ditandai "Order Anda".
                     @endcan
                 </p>
             </div>
@@ -53,9 +53,7 @@
                 <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-200">
                     <tr>
                         <th class="px-6 py-4 font-bold">Kode Order & Tgl</th>
-                        @can('request.view-all')
-                            <th class="px-6 py-4 font-bold">Distributor Pemohon</th>
-                        @endcan
+                        <th class="px-6 py-4 font-bold">Distributor Pemohon</th>
                         <th class="px-6 py-4 font-bold text-center">Total Item</th>
                         <th class="px-6 py-4 font-bold text-center">Status</th>
                         <th class="px-6 py-4 font-bold text-center">Aksi</th>
@@ -63,14 +61,18 @@
                 </thead>
                 <tbody>
                     @foreach ($requests as $req)
+                        @php $milikSaya = $req->user_id === auth()->id(); @endphp
                         <tr class="bg-white border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($req->tanggal_request)->timestamp }}">
                                 <div class="font-bold text-blue-600 text-base">{{ $req->kode_request }}</div>
                                 <div class="text-xs text-slate-400 mt-0.5">{{ \Carbon\Carbon::parse($req->tanggal_request)->format('d M Y, H:i') }}</div>
                             </td>
-                            @can('request.view-all')
-                                <td class="px-6 py-4 font-bold text-slate-700">{{ $req->user?->name ?? 'Distributor Dihapus/Tidak Valid' }}</td>
-                            @endcan
+                            <td class="px-6 py-4 font-bold text-slate-700">
+                                {{ $req->user?->name ?? 'Distributor Dihapus/Tidak Valid' }}
+                                @if ($milikSaya)
+                                    <span class="ml-1 text-[10px] font-bold uppercase text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Order Anda</span>
+                                @endif
+                            </td>
                             <td class="px-6 py-4 text-center font-bold text-slate-700">
                                 {{ $req->details->sum('qty_diminta') }} <span class="text-xs text-slate-400 font-normal">Unit</span>
                             </td>
@@ -84,7 +86,7 @@
                                     @can('request.update-status')
                                         {{ $req->status === 'selesai' ? 'Detail' : 'Proses' }}
                                     @else
-                                        {{ $req->status === 'dikirim' ? 'Terima / Detail' : 'Detail' }}
+                                        {{ ($req->status === 'dikirim' && $milikSaya) ? 'Terima / Detail' : 'Detail' }}
                                     @endcan
                                 </a>
                             </td>

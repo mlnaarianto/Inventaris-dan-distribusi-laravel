@@ -6,6 +6,10 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/produk/{produk}', [ProductController::class, 'destroy'])->middleware('permission:produk.delete')->name('produk.destroy');
 
     Route::get('/mutasi', [MutationController::class, 'index'])->middleware('permission:mutasi.view')->name('mutasi.index');
+    Route::get('/mutasi/cetak', [MutationController::class, 'cetak'])->middleware('permission:mutasi.cetak')->name('mutasi.cetak');
 });
 
 // Rute Profil bawaan Laravel Breeze
@@ -56,5 +61,31 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
+
+Route::middleware('auth')->prefix('roles')->name('roles.')->group(function () {
+    Route::get('/', [RoleController::class, 'index'])->middleware('permission:role.view')->name('index');
+    Route::get('/create', [RoleController::class, 'create'])->middleware('permission:role.create')->name('create');
+    Route::post('/', [RoleController::class, 'store'])->middleware('permission:role.create')->name('store');
+    Route::get('/{role}/edit', [RoleController::class, 'edit'])->middleware('permission:role.update')->name('edit');
+    Route::put('/{role}', [RoleController::class, 'update'])->middleware('permission:role.update')->name('update');
+    Route::delete('/{role}', [RoleController::class, 'destroy'])->middleware('permission:role.delete')->name('destroy');
+
+    Route::get('/{role}/permissions', [RolePermissionController::class, 'edit'])->middleware('permission:role.permission')->name('permissions.edit');
+    Route::put('/{role}/permissions', [RolePermissionController::class, 'update'])->middleware('permission:role.permission')->name('permissions.update');
+});
+
+
+Route::middleware('auth')->prefix('users')->name('users.')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->middleware('permission:user.view')->name('index');
+    Route::get('/create', [UserController::class, 'create'])->middleware('permission:user.create')->name('create');
+    Route::post('/', [UserController::class, 'store'])->middleware('permission:user.create')->name('store');
+    Route::get('/{user}/edit', [UserController::class, 'edit'])->middleware('permission:user.update')->name('edit');
+    Route::put('/{user}', [UserController::class, 'update'])->middleware('permission:user.update')->name('update');
+    Route::delete('/{user}', [UserController::class, 'destroy'])->middleware('permission:user.delete')->name('destroy');
+
+    Route::get('/{user}/password', [UserController::class, 'editPassword'])->middleware('permission:user.reset-password')->name('password.edit');
+    Route::put('/{user}/password', [UserController::class, 'updatePassword'])->middleware('permission:user.reset-password')->name('password.update');
+});
+
 // Rute otentikasi (Login, Logout, dll) bawaan Breeze
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
