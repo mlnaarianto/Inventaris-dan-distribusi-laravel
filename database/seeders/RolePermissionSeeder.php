@@ -47,9 +47,11 @@ class RolePermissionSeeder extends Seeder
         // Distributor: terbatas
         Role::findOrCreate('distributor', 'web')->syncPermissions([
             'dashboard.view',
+            'produk.view',
             'request.view',
             'request.create',
             'request.terima',
+            'mutasi.view',
         ]);
     }
 }
