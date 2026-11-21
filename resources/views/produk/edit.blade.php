@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Edit Varian Produk</x-slot>
     <x-slot name="header">
         Edit Varian Produk
     </x-slot>

@@ -16,6 +16,7 @@ class RolePermissionSeeder extends Seeder
 
         $permissions = [
             'dashboard.view',
+            'dashboard.view-all',   
 
             'produk.view',
             'produk.create',
@@ -30,6 +31,7 @@ class RolePermissionSeeder extends Seeder
             'request.terima',
 
             'mutasi.view',
+            'mutasi.cetak',
 
             'profile.update-email',      // default: hanya super-admin
             'profile.update-username',   // default: hanya super-admin
@@ -48,8 +50,6 @@ class RolePermissionSeeder extends Seeder
             'user.delete',
             'user.reset-password',
 
-            'mutasi.view',
-            'mutasi.cetak',
         ];
 
         foreach ($permissions as $permission) {

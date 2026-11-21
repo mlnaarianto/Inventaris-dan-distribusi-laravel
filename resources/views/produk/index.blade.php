@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Master Katalog Barang</x-slot>
     <x-slot name="header">
         Master Katalog Barang
     </x-slot>

@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Manajemen Role</x-slot>
     <x-slot name="header">Manajemen Role</x-slot>
 
     @if (session('success'))

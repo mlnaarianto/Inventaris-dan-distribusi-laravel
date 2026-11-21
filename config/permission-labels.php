@@ -2,7 +2,8 @@
 
 return [
     'Dashboard' => [
-        'dashboard.view' => 'Melihat dashboard',
+        'dashboard.view'     => 'Melihat dashboard',
+        'dashboard.view-all' => 'Melihat dashboard pusat (statistik gudang)',
     ],
 
     'Katalog Produk' => [

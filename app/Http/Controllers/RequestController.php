@@ -25,6 +25,11 @@ class RequestController extends Controller
 
         $query = ProductRequest::with(['user', 'details'])->orderBy('created_at', 'desc');
 
+        // Tanpa request.view-all, hanya tampilkan milik sendiri
+        if (! auth()->user()->can('request.view-all')) {
+            $query->where('user_id', auth()->id());
+        }
+
         if ($status && in_array($status, self::STATUSES)) {
             $query->where('status', $status);
         } else {
@@ -78,6 +83,8 @@ class RequestController extends Controller
     public function show(string $id)
     {
         $pengajuan = ProductRequest::with(['details.product', 'user'])->findOrFail($id);
+
+        $this->authorizeOwnerOrViewAll($pengajuan);
 
         return view('request.show', compact('pengajuan'));
     }
@@ -146,7 +153,8 @@ class RequestController extends Controller
     }
 
     /**
-     * Distributor (atau super-admin): konfirmasi barang diterima, stok distributor bertambah.
+     * Distributor (atau yang punya request.view-all): konfirmasi barang diterima,
+     * stok distributor bertambah.
      */
     public function terima(string $id)
     {
@@ -184,6 +192,8 @@ class RequestController extends Controller
     public function cetak($id)
     {
         $pengajuan = ProductRequest::with(['details.product', 'user'])->findOrFail($id);
+
+        $this->authorizeOwnerOrViewAll($pengajuan);
 
         $pdf = Pdf::loadView('request.cetak', compact('pengajuan'));
 

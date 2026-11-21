@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Tambah Produk Baru</x-slot>
     <x-slot name="header">
         Tambah Produk Baru
     </x-slot>

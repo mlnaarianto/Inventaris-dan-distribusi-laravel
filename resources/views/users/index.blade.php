@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Kelola Akun</x-slot>
     <x-slot name="header">Kelola Akun</x-slot>
 
     @if (session('success'))

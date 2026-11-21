@@ -1,11 +1,12 @@
 @php
-    $viewAll = auth()->user()->can('request.view-all');
+    // Tampilan sidebar (label versi pusat vs distributor), diatur lewat dashboard.view-all
+    $dashboardAll = auth()->user()->can('dashboard.view-all');
 
     $statuses = [
         [
             'key' => 'pending',
             'icon' => 'fa-clock',
-            'label' => $viewAll ? 'Pesanan Baru' : 'Menunggu Pusat',
+            'label' => $dashboardAll ? 'Pesanan Baru' : 'Menunggu Pusat',
             'bg' => 'bg-orange-50',
             'iconActive' => 'bg-orange-500 text-white shadow-md shadow-orange-500/20',
             'iconHover' => 'group-hover:bg-orange-100 group-hover:text-orange-600',
@@ -15,7 +16,7 @@
         [
             'key' => 'diproses',
             'icon' => 'fa-box-open',
-            'label' => $viewAll ? 'Siap Kirim' : 'Sedang Diproses',
+            'label' => $dashboardAll ? 'Siap Kirim' : 'Sedang Diproses',
             'bg' => 'bg-blue-50',
             'iconActive' => 'bg-blue-600 text-white shadow-md shadow-blue-500/20',
             'iconHover' => 'group-hover:bg-blue-100 group-hover:text-blue-600',
@@ -25,7 +26,7 @@
         [
             'key' => 'dikirim',
             'icon' => 'fa-truck',
-            'label' => $viewAll ? 'Sedang Dikirim' : 'Dalam Perjalanan',
+            'label' => $dashboardAll ? 'Sedang Dikirim' : 'Dalam Perjalanan',
             'bg' => 'bg-indigo-50',
             'iconActive' => 'bg-indigo-500 text-white shadow-md shadow-indigo-500/20',
             'iconHover' => 'group-hover:bg-indigo-100 group-hover:text-indigo-600',
@@ -35,7 +36,7 @@
         [
             'key' => 'selesai',
             'icon' => 'fa-check-circle',
-            'label' => $viewAll ? 'Riwayat Selesai' : 'Pesanan Selesai',
+            'label' => $dashboardAll ? 'Riwayat Selesai' : 'Pesanan Selesai',
             'bg' => 'bg-emerald-50',
             'iconActive' => 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20',
             'iconHover' => 'group-hover:bg-emerald-100 group-hover:text-emerald-600',
@@ -64,7 +65,7 @@
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
                                 <i class="fas fa-chart-pie text-sm"></i>
                             </div>
-                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('dashboard') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">{{ $viewAll ? 'Dashboard Pusat' : 'Dashboard' }}</span>
+                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('dashboard') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">{{ $dashboardAll ? 'Dashboard Pusat' : 'Dashboard' }}</span>
                         </a>
                     </li>
                 @endcan
@@ -96,7 +97,7 @@
                 {{-- Alur / Pantau Pesanan --}}
                 @can('request.view')
                     <li class="px-3 pb-2 pt-4 text-[11px] font-bold tracking-widest text-slate-400 uppercase">
-                        {{ $viewAll ? 'Alur Pesanan' : 'Pantau Pesanan' }}
+                        {{ $dashboardAll ? 'Alur Pesanan' : 'Pantau Pesanan' }}
                     </li>
 
                     @foreach ($statuses as $s)
@@ -116,7 +117,7 @@
                             <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ $allActive ? 'bg-slate-600 text-white shadow-md shadow-slate-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700' }}">
                                 <i class="fas fa-list-ul text-sm"></i>
                             </div>
-                            <span class="ms-3 font-semibold text-sm {{ $allActive ? 'text-slate-800' : 'text-slate-600 group-hover:text-slate-800' }}">{{ $viewAll ? 'Semua Transaksi' : 'Semua Pesanan' }}</span>
+                            <span class="ms-3 font-semibold text-sm {{ $allActive ? 'text-slate-800' : 'text-slate-600 group-hover:text-slate-800' }}">{{ $dashboardAll ? 'Semua Transaksi' : 'Semua Pesanan' }}</span>
                         </a>
                     </li>
                 @endcan

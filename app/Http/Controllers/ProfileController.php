@@ -26,16 +26,17 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        // Hanya key yang ada di rules (lolos validasi) yang diambil.
-        // Tanpa permission, 'email' dan 'username' tidak ada di rules,
-        // jadi otomatis tidak ikut tersimpan.
         $data = $request->safe()->only(['name', 'email', 'username']);
         $fotoLama = $user->foto;
 
+        $pesan = 'Profil berhasil diperbarui.';
+
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('foto-profil', 'public');
+            $pesan = 'Profil dan foto berhasil diperbarui.';
         } elseif ($request->boolean('hapus_foto')) {
             $data['foto'] = null;
+            $pesan = 'Profil diperbarui dan foto berhasil dihapus.';
         }
 
         $user->update($data);
@@ -45,6 +46,6 @@ class ProfileController extends Controller
             Storage::disk('public')->delete($fotoLama);
         }
 
-        return redirect()->route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('profile.edit')->with('success', $pesan);
     }
 }

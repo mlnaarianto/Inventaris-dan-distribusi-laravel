@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Detail Permintaan</x-slot>
     <x-slot name="header">
         @can('request.update-status') Validasi Order: @else Detail Order: @endcan
         <span class="text-blue-600">{{ $pengajuan->kode_request }}</span>

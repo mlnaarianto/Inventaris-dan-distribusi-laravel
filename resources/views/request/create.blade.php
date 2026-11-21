@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Ajukan Permintaan Baru</x-slot>
     <x-slot name="header">
         Form Pengajuan Barang Baru
     </x-slot>

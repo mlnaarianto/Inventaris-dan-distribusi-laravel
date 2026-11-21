@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Masuk | Pocari System</title>
 
+    <link rel="icon" type="image/jpeg" href="{{ asset('assets/123.jpg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="font-poppins antialiased text-slate-800 bg-white selection:bg-pocari-500 selection:text-white">
 
     <div class="flex min-h-screen">
@@ -20,16 +25,16 @@
         {{-- Panel kiri (dekoratif) --}}
         <div class="hidden lg:flex lg:w-1/2 relative bg-pocari-900 overflow-hidden items-center justify-center">
             <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop"
-                 alt="Otsuka Logistics"
-                 class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay scale-105">
+                alt="Otsuka Logistics"
+                class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay scale-105">
 
             <div class="absolute inset-0 bg-gradient-to-br from-pocari-600/90 to-pocari-900/90"></div>
             <div class="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
             <div class="absolute bottom-0 right-0 w-full h-64 bg-gradient-to-t from-pocari-900 to-transparent"></div>
 
             <div class="relative z-10 px-16 xl:px-24 text-white">
-                <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-pocari-600 font-black text-3xl shadow-2xl mb-8 transform -rotate-3">
-                    P
+                <div class="w-24 h-24 bg-white rounded-2xl p-2 shadow-2xl mb-8 transform -rotate-3 flex items-center justify-center overflow-hidden">
+                    <img src="{{ asset('assets/123.jpg') }}" alt="Logo PT. Amerta Indah Otsuka" class="w-full h-full object-contain">
                 </div>
                 <h1 class="text-4xl xl:text-5xl font-extrabold tracking-tight mb-4 leading-tight">
                     Portal Integrasi<br>Supply Chain.
@@ -48,15 +53,12 @@
         {{-- Panel kanan (form login) --}}
         <div class="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-16 xl:px-32 bg-white relative">
 
-            <a href="{{ url('/') }}" class="absolute top-8 left-8 sm:left-16 xl:left-32 text-sm font-bold text-slate-400 hover:text-pocari-600 transition-colors flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Kembali
-            </a>
-
             <div class="max-w-md w-full mx-auto">
 
                 <div class="flex lg:hidden items-center gap-3 mb-10">
-                    <div class="w-10 h-10 bg-pocari-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg">P</div>
+                    <div class="w-12 h-12 bg-white border border-slate-200 rounded-xl p-1 shadow-lg flex items-center justify-center overflow-hidden">
+                        <img src="{{ asset('assets/123.jpg') }}" alt="Logo PT. Amerta Indah Otsuka" class="w-full h-full object-contain">
+                    </div>
                     <span class="font-extrabold text-xl tracking-tight">Pocari<span class="text-pocari-600"> System</span></span>
                 </div>
 
@@ -64,17 +66,6 @@
                     <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Selamat Datang</h2>
                     <p class="text-slate-500 text-sm">Silakan masukkan username dan kata sandi Anda untuk mengakses ruang kerja sistem.</p>
                 </div>
-
-                @if ($errors->any())
-                    <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 flex items-start gap-3 text-red-600">
-                        <i class="fas fa-exclamation-circle mt-0.5"></i>
-                        <ul class="text-sm font-medium">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
 
                 <form method="POST" action="{{ route('login') }}" class="space-y-6">
                     @csrf
@@ -100,7 +91,7 @@
                                 class="bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-pocari-500/20 focus:border-pocari-500 block w-full pl-11 pr-11 p-3.5 outline-none transition-all" />
 
                             <button type="button" id="togglePassword" aria-label="Tampilkan atau sembunyikan kata sandi"
-                                    class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-pocari-600 transition-colors">
+                                class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-pocari-600 transition-colors">
                                 <i class="fas fa-eye" id="eyeIcon"></i>
                             </button>
                         </div>
@@ -129,6 +120,7 @@
     </div>
 
     <script>
+        // Tampilkan / sembunyikan kata sandi
         const togglePassword = document.querySelector('#togglePassword');
         const password = document.querySelector('#password');
         const eyeIcon = document.querySelector('#eyeIcon');
@@ -139,6 +131,36 @@
             eyeIcon.classList.toggle('fa-eye');
             eyeIcon.classList.toggle('fa-eye-slash');
         });
+
+        // Toast pojok kanan atas
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        @if (session('success'))
+            Toast.fire({ icon: 'success', title: @json(session('success')) });
+        @endif
+
+        @if (session('error'))
+            Toast.fire({ icon: 'error', title: @json(session('error')), timer: 6000 });
+        @endif
+
+        @if (session('status'))
+            Toast.fire({ icon: 'success', title: @json(session('status')) });
+        @endif
+
+        @if ($errors->any())
+            Toast.fire({ icon: 'error', title: @json($errors->first()), timer: 6000 });
+        @endif
     </script>
 </body>
+
 </html>

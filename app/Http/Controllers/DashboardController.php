@@ -11,9 +11,11 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $viewAll = $user->can('request.view-all');
 
-        // Pusat melihat semua order, selain itu hanya order miliknya sendiri
+        $viewAll      = $user->can('request.view-all');    // cakupan data
+        $dashboardAll = $user->can('dashboard.view-all');  // tampilan dashboard pusat
+
+        // Yang punya request.view-all melihat semua order, selain itu hanya miliknya sendiri
         $scope = fn ($query) => $viewAll ? $query : $query->where('user_id', $user->id);
 
         $perStatus = $scope(ProductRequest::query())
@@ -34,13 +36,13 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Statistik gudang hanya untuk yang bisa melihat semua order
-        $gudang = $viewAll ? [
+        // Statistik gudang hanya untuk yang punya dashboard.view-all
+        $gudang = $dashboardAll ? [
             'totalProduk'  => Product::count(),
             'totalStok'    => (int) Product::sum('stok_pusat'),
             'mutasiKeluar' => StockMutation::where('jenis_mutasi', 'keluar')->count(),
         ] : null;
 
-        return view('dashboard', compact('viewAll', 'stat', 'recentRequests', 'gudang'));
+        return view('dashboard', compact('viewAll', 'dashboardAll', 'stat', 'recentRequests', 'gudang'));
     }
 }

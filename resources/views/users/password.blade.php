@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Reset Password</x-slot>
     <x-slot name="header">Reset Password</x-slot>
 
     <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 max-w-xl">

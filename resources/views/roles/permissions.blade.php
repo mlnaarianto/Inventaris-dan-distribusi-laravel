@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Permission Role: {{ Str::headline($role->name) }}</x-slot>
     <x-slot name="header">Permission Role: {{ Str::headline($role->name) }}</x-slot>
 
     <form method="POST" action="{{ route('roles.permissions.update', $role) }}" class="space-y-5">

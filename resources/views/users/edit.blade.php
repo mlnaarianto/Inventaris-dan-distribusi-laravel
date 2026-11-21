@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Edit Akun</x-slot>
     <x-slot name="header">Ubah Akun</x-slot>
 
     @if (session('error'))

@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">Daftar Permintaan</x-slot>
     <x-slot name="header">
         @can('request.view-all') Permintaan Masuk @else Daftar Pengajuan Barang @endcan
     </x-slot>

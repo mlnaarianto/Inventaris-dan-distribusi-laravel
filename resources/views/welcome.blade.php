@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sistem Distribusi | PT Amerta Indah Otsuka</title>
+
+    <link rel="icon" type="image/jpeg" href="{{ asset('assets/123.jpg') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,12 +20,13 @@
         /* Efek latar belakang ombak estetik */
         .bg-wave {
             background-color: #ffffff;
-            background-image: radial-gradient(at 40% 20%, hsla(213,100%,92%,1) 0px, transparent 50%),
-                              radial-gradient(at 80% 0%, hsla(220,100%,95%,1) 0px, transparent 50%),
-                              radial-gradient(at 0% 50%, hsla(215,100%,94%,1) 0px, transparent 50%);
+            background-image: radial-gradient(at 40% 20%, hsla(213, 100%, 92%, 1) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, hsla(220, 100%, 95%, 1) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(215, 100%, 94%, 1) 0px, transparent 50%);
         }
     </style>
 </head>
+
 <body class="font-poppins antialiased bg-wave text-slate-800 min-h-screen flex flex-col selection:bg-pocari-500 selection:text-white">
 
     <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-white/20 shadow-sm">
@@ -39,15 +43,15 @@
                 </div>
                 <div class="flex items-center gap-4">
                     @if (Route::has('login'))
-                        @auth
-                            <a href="{{ route('dashboard') }}" class="font-semibold text-sm text-pocari-600 bg-pocari-50 px-5 py-2.5 rounded-xl hover:bg-pocari-100 transition-colors">
-                                Masuk ke Dashboard
-                            </a>
-                        @else
-                            <a href="{{ route('login') }}" class="font-semibold text-sm text-white bg-pocari-600 px-6 py-2.5 rounded-xl shadow-md shadow-pocari-500/20 hover:bg-pocari-700 hover:-translate-y-0.5 transition-all">
-                                Log in Sistem
-                            </a>
-                        @endauth
+                    @auth
+                    <a href="{{ route('dashboard') }}" class="font-semibold text-sm text-pocari-600 bg-pocari-50 px-5 py-2.5 rounded-xl hover:bg-pocari-100 transition-colors">
+                        Masuk ke Dashboard
+                    </a>
+                    @else
+                    <a href="{{ route('login') }}" class="font-semibold text-sm text-white bg-pocari-600 px-6 py-2.5 rounded-xl shadow-md shadow-pocari-500/20 hover:bg-pocari-700 hover:-translate-y-0.5 transition-all">
+                        Log in Sistem
+                    </a>
+                    @endauth
                     @endif
                 </div>
             </div>
@@ -75,13 +79,13 @@
 
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                         @auth
-                            <a href="{{ route('dashboard') }}" class="w-full sm:w-auto text-center font-bold text-white bg-pocari-600 px-8 py-3.5 rounded-xl shadow-lg shadow-pocari-500/30 hover:bg-pocari-700 hover:-translate-y-1 transition-all">
-                                Buka Ruang Kerja <i class="fas fa-arrow-right ml-2"></i>
-                            </a>
+                        <a href="{{ route('dashboard') }}" class="w-full sm:w-auto text-center font-bold text-white bg-pocari-600 px-8 py-3.5 rounded-xl shadow-lg shadow-pocari-500/30 hover:bg-pocari-700 hover:-translate-y-1 transition-all">
+                            Buka Ruang Kerja <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
                         @else
-                            <a href="{{ route('login') }}" class="w-full sm:w-auto text-center font-bold text-white bg-pocari-600 px-8 py-3.5 rounded-xl shadow-lg shadow-pocari-500/30 hover:bg-pocari-700 hover:-translate-y-1 transition-all">
-                                Masuk ke Sistem
-                            </a>
+                        <a href="{{ route('login') }}" class="w-full sm:w-auto text-center font-bold text-white bg-pocari-600 px-8 py-3.5 rounded-xl shadow-lg shadow-pocari-500/30 hover:bg-pocari-700 hover:-translate-y-1 transition-all">
+                            Masuk ke Sistem
+                        </a>
                         @endauth
                         <a href="#fitur" class="w-full sm:w-auto text-center font-bold text-slate-600 bg-white border-2 border-slate-200 px-8 py-3.5 rounded-xl hover:border-pocari-500 hover:text-pocari-600 hover:-translate-y-1 transition-all">
                             Pelajari Fitur
@@ -161,4 +165,5 @@
     </footer>
 
 </body>
+
 </html>
