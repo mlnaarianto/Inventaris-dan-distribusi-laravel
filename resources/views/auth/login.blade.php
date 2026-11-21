@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Log in | OtsukaHub System</title>
+    <title>Masuk | Pocari System</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,6 +29,7 @@
 
     <div class="flex min-h-screen">
 
+        {{-- Panel kiri (dekoratif) --}}
         <div class="hidden lg:flex lg:w-1/2 relative bg-pocari-900 overflow-hidden items-center justify-center">
             <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop"
                  alt="Otsuka Logistics"
@@ -56,6 +57,7 @@
             </div>
         </div>
 
+        {{-- Panel kanan (form login) --}}
         <div class="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-16 xl:px-32 bg-white relative">
 
             <a href="{{ url('/') }}" class="absolute top-8 left-8 sm:left-16 xl:left-32 text-sm font-bold text-slate-400 hover:text-pocari-600 transition-colors flex items-center gap-2">
@@ -67,7 +69,7 @@
 
                 <div class="flex lg:hidden items-center gap-3 mb-10">
                     <div class="w-10 h-10 bg-pocari-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg">P</div>
-                    <span class="font-extrabold text-xl tracking-tight">Otsuka<span class="text-pocari-600">Hub</span></span>
+                    <span class="font-extrabold text-xl tracking-tight">Pocari<span class="text-pocari-600"> System</span></span>
                 </div>
 
                 <div class="mb-10 text-center sm:text-left">
@@ -101,29 +103,24 @@
                     </div>
 
                     <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <label for="password" class="block text-sm font-bold text-slate-700">Kata Sandi</label>
-                            @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}" class="text-xs font-bold text-pocari-600 hover:text-pocari-700 transition-colors">
-                                    Lupa sandi?
-                                </a>
-                            @endif
-                        </div>
+                        <label for="password" class="block mb-2 text-sm font-bold text-slate-700">Kata Sandi</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
                                 <i class="fas fa-lock"></i>
                             </div>
-                            <input id="password" type="password" name="password" required placeholder="••••••••"
+                            <input id="password" type="password" name="password" required autocomplete="current-password" placeholder="••••••••"
                                 class="bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-pocari-500/20 focus:border-pocari-500 block w-full pl-11 pr-11 p-3.5 outline-none transition-all" />
 
-                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer text-slate-400 hover:text-pocari-600 transition-colors" id="togglePassword">
+                            <button type="button" id="togglePassword" aria-label="Tampilkan atau sembunyikan kata sandi"
+                                    class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-pocari-600 transition-colors">
                                 <i class="fas fa-eye" id="eyeIcon"></i>
-                            </div>
+                            </button>
                         </div>
+                        <p class="mt-2 text-xs text-slate-400">Lupa kata sandi? Hubungi administrator untuk mereset akun Anda.</p>
                     </div>
 
                     <div class="flex items-center">
-                        <input id="remember_me" type="checkbox" name="remember" class="w-4 h-4 text-pocari-600 bg-slate-50 border-slate-300 rounded focus:ring-pocari-500 focus:ring-2 cursor-pointer">
+                        <input id="remember_me" type="checkbox" name="remember" value="1" class="w-4 h-4 text-pocari-600 bg-slate-50 border-slate-300 rounded focus:ring-pocari-500 focus:ring-2 cursor-pointer">
                         <label for="remember_me" class="ml-2 text-sm font-medium text-slate-600 cursor-pointer">Ingat sesi saya</label>
                     </div>
 
@@ -148,11 +145,9 @@
         const password = document.querySelector('#password');
         const eyeIcon = document.querySelector('#eyeIcon');
 
-        togglePassword.addEventListener('click', function (e) {
-            // Ubah tipe input
+        togglePassword.addEventListener('click', function () {
             const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
-            // Ubah ikon mata
             eyeIcon.classList.toggle('fa-eye');
             eyeIcon.classList.toggle('fa-eye-slash');
         });

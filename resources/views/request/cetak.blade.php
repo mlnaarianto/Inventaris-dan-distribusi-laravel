@@ -2,108 +2,185 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surat Jalan - {{ $pengajuan->kode_request }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @media print {
-            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: white; }
-            @page { size: A4; margin: 20mm; }
-            .no-print { display: none !important; }
-        }
-        body { font-family: 'Times New Roman', Times, serif; color: #000; }
+        @page { margin: 28mm 18mm 22mm 18mm; }
+        * { box-sizing: border-box; }
+        body { font-family: 'DejaVu Sans', sans-serif; font-size: 10.5px; color: #1e293b; line-height: 1.45; }
+
+        header { position: fixed; top: -20mm; left: 0; right: 0; }
+        footer { position: fixed; bottom: -14mm; left: 0; right: 0; font-size: 9px; color: #64748b; border-top: 1px solid #cbd5e1; padding-top: 5px; }
+        .pagenum:before { content: counter(page); }
+
+        table { width: 100%; border-collapse: collapse; }
+        td, th { vertical-align: top; }
+
+        .kop td { padding: 0; }
+        .kop-nama { font-size: 17px; font-weight: bold; color: #1d4ed8; letter-spacing: 0.5px; }
+        .kop-sub { font-size: 9.5px; color: #475569; }
+        .kop-judul { font-size: 22px; font-weight: bold; color: #94a3b8; text-align: right; letter-spacing: 2px; }
+        .kop-nomor { text-align: right; font-size: 11px; font-weight: bold; }
+        .garis { border-top: 3px solid #1d4ed8; margin: 6px 0 14px; }
+
+        .info td { padding: 2px 0; }
+        .info .lbl { width: 95px; color: #64748b; }
+        .kotak { border: 1px solid #94a3b8; padding: 8px 10px; }
+        .kotak-judul { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 3px; }
+        .kotak-nama { font-size: 14px; font-weight: bold; text-transform: uppercase; }
+
+        .badge { display: inline-block; padding: 2px 8px; border: 1px solid #94a3b8; font-size: 9px; font-weight: bold; text-transform: uppercase; }
+
+        .item { margin-top: 14px; }
+        .item th { background: #e2e8f0; border: 1px solid #94a3b8; padding: 6px 5px; font-size: 9.5px; text-transform: uppercase; }
+        .item td { border: 1px solid #94a3b8; padding: 6px 5px; }
+        .item tr { page-break-inside: avoid; }
+        .item tfoot td { background: #f1f5f9; font-weight: bold; }
+
+        .tengah { text-align: center; }
+        .kanan { text-align: right; }
+
+        .catatan { margin-top: 14px; font-size: 9.5px; color: #475569; }
+        .catatan ol { margin: 3px 0 0 16px; padding: 0; }
+
+        .ttd { margin-top: 26px; page-break-inside: avoid; }
+        .ttd td { width: 33.33%; text-align: center; padding: 0 8px; }
+        .ttd .ruang { height: 62px; }
+        .ttd .garis-ttd { border-bottom: 1px solid #000; margin: 0 14px 3px; height: 1px; }
+        .ttd .peran { font-size: 9px; color: #64748b; }
     </style>
 </head>
-<body class="bg-gray-100 flex justify-center py-10 print:py-0 print:bg-white">
+<body>
+    @php
+        $nomorSurat = str_replace('REQ-', 'SJ-', $pengajuan->kode_request);
+        $totalJenis = $pengajuan->details->count();
+        $totalQty   = $pengajuan->details->sum('qty_diminta');
+        $statusLabel = [
+            'diproses' => 'Siap Kirim',
+            'dikirim'  => 'Dalam Pengiriman',
+            'selesai'  => 'Sudah Diterima',
+        ][$pengajuan->status] ?? ucfirst($pengajuan->status);
+    @endphp
 
-    <div class="bg-white w-[210mm] min-h-[297mm] shadow-lg print:shadow-none p-10 relative">
+    <header>
+        <table class="kop">
+            <tr>
+                <td>
+                    <div class="kop-nama">PT. AMERTA INDAH OTSUKA</div>
+                    <div class="kop-sub">Gudang Pusat Distribusi Pocari Sweat Indonesia</div>
+                    <div class="kop-sub">Jl. Siliwangi Km 28, Sukabumi, Jawa Barat</div>
+                </td>
+                <td>
+                    <div class="kop-judul">SURAT JALAN</div>
+                    <div class="kop-nomor">No. {{ $nomorSurat }}</div>
+                </td>
+            </tr>
+        </table>
+        <div class="garis"></div>
+    </header>
 
-        <button onclick="window.print()" class="no-print absolute top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg font-sans font-bold shadow-md hover:bg-blue-700">
-            Cetak Dokumen
-        </button>
+    <footer>
+        <table>
+            <tr>
+                <td>Dokumen ini dicetak otomatis oleh Pocari System pada {{ now()->format('d/m/Y H:i') }} WIB.</td>
+                <td class="kanan">Halaman <span class="pagenum"></span></td>
+            </tr>
+        </table>
+    </footer>
 
-        <div class="border-b-4 border-black pb-4 mb-6 flex items-center justify-between">
-            <div>
-                <h1 class="text-2xl font-black uppercase tracking-widest text-blue-800 print:text-black">PT. AMERTA INDAH OTSUKA</h1>
-                <p class="text-sm">Gudang Pusat Distribusi Pocari Sweat Indonesia</p>
-                <p class="text-sm">Jl. Siliwangi Km 28, Sukabumi, Jawa Barat</p>
-            </div>
-            <div class="text-right">
-                <h2 class="text-3xl font-black uppercase tracking-widest text-gray-400">SURAT JALAN</h2>
-            </div>
-        </div>
+    <main>
+        {{-- Informasi dokumen & tujuan --}}
+        <table>
+            <tr>
+                <td style="width: 52%; padding-right: 14px;">
+                    <table class="info">
+                        <tr><td class="lbl">No. Surat Jalan</td><td>: <strong>{{ $nomorSurat }}</strong></td></tr>
+                        <tr><td class="lbl">Ref. Order</td><td>: {{ $pengajuan->kode_request }}</td></tr>
+                        <tr><td class="lbl">Tanggal Order</td><td>: {{ \Carbon\Carbon::parse($pengajuan->tanggal_request)->translatedFormat('d F Y, H:i') }} WIB</td></tr>
+                        <tr><td class="lbl">Tanggal Cetak</td><td>: {{ now()->translatedFormat('d F Y, H:i') }} WIB</td></tr>
+                        <tr><td class="lbl">Status Order</td><td>: <span class="badge">{{ $statusLabel }}</span></td></tr>
+                    </table>
+                </td>
+                <td style="width: 48%;">
+                    <div class="kotak">
+                        <div class="kotak-judul">Dikirim kepada</div>
+                        <div class="kotak-nama">{{ $pengajuan->user?->name ?? 'Distributor Tidak Aktif' }}</div>
+                        @if ($pengajuan->user?->email)
+                            <div class="kop-sub" style="margin-top: 2px;">{{ $pengajuan->user->email }}</div>
+                        @endif
+                        <div class="kop-sub" style="margin-top: 2px;">Distributor Resmi Pocari Sweat</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
 
-        <div class="flex justify-between mb-8 text-sm">
-            <div>
-                <table class="leading-relaxed">
-                    <tr><td class="pr-4 font-bold">No. Referensi</td><td>: {{ $pengajuan->kode_request }}</td></tr>
-                    <tr><td class="pr-4 font-bold">Tanggal Cetak</td><td>: {{ \Carbon\Carbon::now()->format('d F Y') }}</td></tr>
-                    <tr><td class="pr-4 font-bold">Tanggal Order</td><td>: {{ \Carbon\Carbon::parse($pengajuan->tanggal_request)->format('d F Y') }}</td></tr>
-                </table>
-            </div>
-            <div class="w-1/2 border border-black p-3 rounded-lg">
-                <p class="font-bold border-b border-black pb-1 mb-1">Dikirim Kepada / Tujuan:</p>
-                <p class="font-bold text-lg uppercase">
-                    {{ $pengajuan->user?->name ?? 'DISTRIBUTOR TIDAK AKTIF' }}
-                </p>
-                <p class="text-xs mt-1">Cabang Distributor Resmi Pocari Sweat</p>
-            </div>
-        </div>
+        <p style="margin: 14px 0 0;">
+            Bersama surat ini kami kirimkan barang-barang berikut dengan kendaraan perusahaan dalam keadaan baik dan utuh:
+        </p>
 
-        <p class="text-sm mb-4">Bersama surat ini, kami kirimkan barang-barang di bawah ini dengan kendaraan perusahaan dalam keadaan baik dan utuh:</p>
-
-        <table class="w-full text-sm border-collapse border border-black mb-8">
+        {{-- Daftar barang --}}
+        <table class="item">
             <thead>
-                <tr class="bg-gray-100">
-                    <th class="border border-black p-2 w-10 text-center">NO</th>
-                    <th class="border border-black p-2 text-left">NAMA PRODUK</th>
-                    <th class="border border-black p-2 text-center w-32">KEMASAN</th>
-                    <th class="border border-black p-2 text-center w-24">QTY</th>
+                <tr>
+                    <th style="width: 28px;">No</th>
+                    <th>Nama Produk</th>
+                    <th style="width: 70px;">Ukuran</th>
+                    <th style="width: 70px;">Satuan</th>
+                    <th style="width: 60px;">Qty</th>
+                    <th style="width: 70px;">Cek Terima</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($pengajuan->details as $index => $detail)
-                <tr>
-                    <td class="border border-black p-2 text-center">{{ $index + 1 }}</td>
-                    <td class="border border-black p-2 font-bold">{{ $detail->product->nama_barang }}</td>
-                    <td class="border border-black p-2 text-center">{{ $detail->product->ukuran }}</td>
-                    <td class="border border-black p-2 text-center font-bold">{{ $detail->qty_diminta }} {{ $detail->product->satuan }}</td>
-                </tr>
+                @foreach ($pengajuan->details as $i => $detail)
+                    <tr>
+                        <td class="tengah">{{ $i + 1 }}</td>
+                        <td><strong>{{ $detail->product?->nama_barang ?? 'Produk Dihapus' }}</strong></td>
+                        <td class="tengah">{{ $detail->product?->ukuran ?? '-' }}</td>
+                        <td class="tengah">{{ strtoupper($detail->product?->satuan ?? '-') }}</td>
+                        <td class="tengah"><strong>{{ number_format($detail->qty_diminta, 0, ',', '.') }}</strong></td>
+                        <td class="tengah">&#9744;</td>
+                    </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3" class="border border-black p-2 text-right font-bold">TOTAL KUANTITAS KESELURUHAN :</td>
-                    <td class="border border-black p-2 text-center font-bold text-lg">{{ $pengajuan->details->sum('qty_diminta') }}</td>
+                    <td colspan="4" class="kanan">Total ({{ $totalJenis }} jenis barang)</td>
+                    <td class="tengah">{{ number_format($totalQty, 0, ',', '.') }}</td>
+                    <td></td>
                 </tr>
             </tfoot>
         </table>
 
-        <div class="text-xs mb-10 italic">
-            * Catatan: Barang yang sudah diterima dan ditandatangani tidak dapat dikembalikan tanpa persetujuan khusus.
+        {{-- Catatan --}}
+        <div class="catatan">
+            <strong>Catatan:</strong>
+            <ol>
+                <li>Periksa jumlah dan kondisi barang saat diterima, lalu beri tanda pada kolom "Cek Terima".</li>
+                <li>Klaim kekurangan atau kerusakan wajib dicatat pada surat jalan ini sebelum penerima menandatangani.</li>
+                <li>Barang yang sudah diterima dan ditandatangani tidak dapat dikembalikan tanpa persetujuan Pusat.</li>
+            </ol>
         </div>
 
-        <div class="flex justify-between text-center text-sm px-10">
-            <div>
-                <p class="mb-16">Penerima Barang,</p>
-                <p class="font-bold border-b border-black pb-1 w-40 mx-auto">
-                    ({{ $pengajuan->user?->name ?? '...................................' }})
-                </p>
-                <p class="text-xs mt-1">Distributor</p>
-            </div>
-            <div>
-                <p class="mb-16">Mengetahui/Gudang,</p>
-                <p class="font-bold border-b border-black pb-1 w-40 mx-auto">(...................................)</p>
-                <p class="text-xs mt-1">Admin Pusat</p>
-            </div>
-            <div>
-                <p class="mb-16">Pengemudi / Supir,</p>
-                <p class="font-bold border-b border-black pb-1 w-40 mx-auto">(...................................)</p>
-                <p class="text-xs mt-1">Logistik</p>
-            </div>
-        </div>
-
-    </div>
-
+        {{-- Tanda tangan --}}
+        <table class="ttd">
+            <tr>
+                <td>Penerima Barang,</td>
+                <td>Pengemudi / Logistik,</td>
+                <td>Mengetahui, Admin Gudang</td>
+            </tr>
+            <tr>
+                <td class="ruang"></td><td class="ruang"></td><td class="ruang"></td>
+            </tr>
+            <tr>
+                <td><div class="garis-ttd"></div><strong>{{ $pengajuan->user?->name ?? '..............................' }}</strong></td>
+                <td><div class="garis-ttd"></div>(..............................)</td>
+                <td><div class="garis-ttd"></div>(..............................)</td>
+            </tr>
+            <tr>
+                <td class="peran">Distributor</td>
+                <td class="peran">Tanggal: ____ / ____ / ________</td>
+                <td class="peran">Pusat</td>
+            </tr>
+        </table>
+    </main>
 </body>
 </html>
