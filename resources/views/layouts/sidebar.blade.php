@@ -89,15 +89,6 @@
                         </a>
                     </li>
 
-                    <!-- MENU BARU: Prediksi Stok AI -->
-                    <li>
-                        <a href="{{ route('pusat.prediksi.index') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('pusat.prediksi.*') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">
-                            <div class="flex items-center justify-center w-9 h-9 rounded-md transition-all {{ request()->routeIs('pusat.prediksi.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600' }}">
-                                <i class="fas fa-brain text-sm"></i>
-                            </div>
-                            <span class="ms-3 font-semibold text-sm {{ request()->routeIs('pusat.prediksi.*') ? 'text-blue-700' : 'text-slate-600 group-hover:text-blue-700' }}">Prediksi Stok (AI)</span>
-                        </a>
-                    </li>
                 @else
                     <li>
                         <a href="{{ route('dashboard') }}" class="flex items-center p-2.5 rounded-lg transition-all group {{ request()->routeIs('dashboard') ? 'bg-blue-50' : 'hover:bg-slate-50' }}">

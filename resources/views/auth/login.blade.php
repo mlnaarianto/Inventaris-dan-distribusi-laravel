@@ -72,7 +72,7 @@
 
                 <div class="mb-10 text-center sm:text-left">
                     <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Selamat Datang</h2>
-                    <p class="text-slate-500 text-sm">Silakan masukkan email dan kata sandi Anda untuk mengakses ruang kerja sistem.</p>
+                    <p class="text-slate-500 text-sm">Silakan masukkan username dan kata sandi Anda untuk mengakses ruang kerja sistem.</p>
                 </div>
 
                 @if ($errors->any())
@@ -90,12 +90,12 @@
                     @csrf
 
                     <div>
-                        <label for="email" class="block mb-2 text-sm font-bold text-slate-700">Alamat Email</label>
+                        <label for="username" class="block mb-2 text-sm font-bold text-slate-700">Username</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                                <i class="fas fa-envelope"></i>
+                                <i class="fas fa-user"></i>
                             </div>
-                            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus placeholder="contoh@distributor.com"
+                            <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus autocomplete="username" placeholder="contoh: distributor"
                                 class="bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-pocari-500/20 focus:border-pocari-500 block w-full pl-11 p-3.5 outline-none transition-all" />
                         </div>
                     </div>

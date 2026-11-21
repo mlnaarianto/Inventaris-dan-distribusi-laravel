@@ -1,23 +1,17 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Pusat\ProductController;
 use App\Http\Controllers\Pusat\RequestController as PusatRequestController;
 use App\Http\Controllers\Pusat\StockPredictionController;
 use App\Http\Controllers\Distributor\RequestController as DistributorRequestController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Pusat\DashboardController as PusatDashboardController;
-use App\Http\Controllers\Distributor\DashboardController as DistributorDashboardController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
 // Halaman awal / Landing Page
@@ -25,20 +19,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// 1. Pengaturan Pengalihan (Redirect) Otomatis setelah Login
-Route::get('/dashboard', function () {
-    if (auth()->user()->role === 'pusat') {
-        return redirect()->route('pusat.dashboard');
-    }
-    return redirect()->route('distributor.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// 1. Dashboard tunggal (isi menyesuaikan permission di controller)
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified', 'permission:dashboard.view'])
+    ->name('dashboard');
 
 
-// 2. Ruang Kerja Khusus PUSAT (Admin Pusat Pocari)
-Route::middleware(['auth', 'role:pusat'])->prefix('pusat')->name('pusat.')->group(function () {
-
-    // Dashboard pusat otomatis dialihkan ke halaman produk
-    Route::get('/dashboard', [PusatDashboardController::class, 'index'])->name('dashboard');
+// 2. Ruang Kerja Khusus PUSAT (sementara, akan dibongkar di commit berikutnya)
+Route::middleware(['auth', 'role:pusat|super-admin'])->prefix('pusat')->name('pusat.')->group(function () {
 
     // Rute CRUD Master Barang
     Route::resource('produk', ProductController::class);
@@ -56,17 +44,14 @@ Route::middleware(['auth', 'role:pusat'])->prefix('pusat')->name('pusat.')->grou
     Route::put('request/{id}/update-status', [PusatRequestController::class, 'updateStatus'])->name('request.updateStatus');
 
     // Rute Prediksi Stok AI
-    Route::get('prediksi-stok', [StockPredictionController::class, 'index'])->name('prediksi.index');
-    Route::post('prediksi-stok', [StockPredictionController::class, 'predict'])->name('prediksi.predict');
+    // Route::get('prediksi-stok', [StockPredictionController::class, 'index'])->name('prediksi.index');
+    // Route::post('prediksi-stok', [StockPredictionController::class, 'predict'])->name('prediksi.predict');
 
 });
 
 
-// 3. Ruang Kerja Khusus DISTRIBUTOR
+// 3. Ruang Kerja Khusus DISTRIBUTOR (sementara, akan dibongkar di commit berikutnya)
 Route::middleware(['auth', 'role:distributor'])->prefix('distributor')->name('distributor.')->group(function () {
-
-    // Dashboard distributor otomatis dialihkan ke halaman request
-    Route::get('/dashboard', [DistributorDashboardController::class, 'index'])->name('dashboard');
 
     // Rute Pembuatan & Riwayat Request Barang
     Route::resource('request', DistributorRequestController::class);
